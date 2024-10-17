@@ -13,6 +13,8 @@ class ShopAppConstants {
          val AppSecondaryTextColor = 0xFF9A9BA2
          val AppCardColor = 0xFF0C1755
          val AppIconColor = 0xFFFFFFFF
+         val CardBorderColor = 0x7C9C9DA3
+         val dividerColor = 0x7C9C9DA3
     }
 
 } // end

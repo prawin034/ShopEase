@@ -95,12 +95,20 @@ dependencies {
      */
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 
-
-
-    /* Material Icons */
+    /* Material Icons
+    */
     implementation("androidx.compose.material:material-icons-core")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.material3:material3-window-size-class")
 
+    /* LiveData observing
+
+     */
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.3")
+
+    /* Coil
+
+     */
+    implementation("io.coil-kt:coil-compose:2.6.0")  // Make sure to use the latest version
 
 }

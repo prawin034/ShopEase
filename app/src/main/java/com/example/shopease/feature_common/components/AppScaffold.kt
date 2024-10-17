@@ -2,6 +2,7 @@ package com.example.shopease.feature_common.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -43,7 +44,7 @@ fun AppScaffold(
         containerColor = containerColor,
         content = {
             Surface(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(it),
                 color = Color.White
             ) {
                 content()
