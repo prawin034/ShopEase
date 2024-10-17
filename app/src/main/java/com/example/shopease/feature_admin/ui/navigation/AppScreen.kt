@@ -9,5 +9,6 @@ package com.example.shopease.feature_admin.ui.navigation
 sealed class Screen(val route : String) {
 
       data object AdminScreen : Screen( "AdminScreen")
+      data object DetailsScreen : Screen("DetailsScreen")
 
 }

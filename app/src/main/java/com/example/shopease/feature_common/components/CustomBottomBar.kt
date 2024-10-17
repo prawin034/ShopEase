@@ -1,11 +1,10 @@
 package com.example.shopease.feature_common.components
 
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.runtime.Composable
@@ -25,8 +24,12 @@ fun CustomBottomBar(
 
     BottomAppBar(
         modifier = Modifier
+            .padding(2.dp)
             .fillMaxWidth()
-            .padding(25.dp)
+            .height(79.dp)
+            .padding(horizontal = 25.dp)
+            .padding(10.dp  )
+
             .clip(shape = RoundedCornerShape(17.dp)),
         containerColor = Color(ShopAppConstants.AppBottomBarContainerColor),
         contentColor = Color(ShopAppConstants.AppIconColor),

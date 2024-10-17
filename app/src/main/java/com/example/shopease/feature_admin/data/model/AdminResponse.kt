@@ -61,3 +61,9 @@ data class Meta(
     val barcode: String,
     val qrCode: String
 )
+
+
+data class ProductPager(
+    val id: Int,
+    val url: String,
+)

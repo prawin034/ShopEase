@@ -1,16 +1,14 @@
 package com.example.shopease.feature_admin.ui.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.shopease.feature_admin.ui.screens.all.cart.CartScreen
-import com.example.shopease.feature_admin.ui.screens.all.home.HomeScreen
-import com.example.shopease.feature_admin.ui.screens.all.profile.ProfileScreen
-import com.example.shopease.feature_admin.ui.screens.all.search.SearchScreen
+import com.example.shopease.feature_admin.ui.screens.all.details.DetailsScreen
 import com.example.shopease.feature_admin.ui.screens.main.AdminScreen
 import com.example.shopease.feature_admin.ui.viewModel.CommonViewModel
 import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
@@ -19,6 +17,7 @@ import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
 /* Navigation
 This is basically the navigation for all screens
 */
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun App(
     commonViewModel: CommonViewModel,
@@ -36,6 +35,16 @@ fun App(
             route = Screen.AdminScreen.route,
         ) {
             AdminScreen(navController,commonViewModel,homeScreenViewModel)
+        }
+
+        composable(
+            route = "${Screen.DetailsScreen.route}/{id}",
+            arguments = listOf(
+                navArgument("id") {type = NavType.IntType}
+            )
+        ){backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id")
+            DetailsScreen(navController,homeScreenViewModel,id)
         }
 
 

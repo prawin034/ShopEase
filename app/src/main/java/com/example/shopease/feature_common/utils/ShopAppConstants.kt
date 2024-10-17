@@ -1,7 +1,5 @@
 package com.example.shopease.feature_common.utils
 
-import androidx.compose.ui.graphics.Color
-
 class ShopAppConstants {
 
     companion object {
@@ -15,6 +13,7 @@ class ShopAppConstants {
          val AppIconColor = 0xFFFFFFFF
          val CardBorderColor = 0x7C9C9DA3
          val dividerColor = 0x7C9C9DA3
+         val cardLightColor = 0xFFF7F7FF
     }
 
 } // end

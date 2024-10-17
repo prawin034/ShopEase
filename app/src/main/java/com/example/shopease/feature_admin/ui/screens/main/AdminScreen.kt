@@ -1,5 +1,7 @@
 package com.example.shopease.feature_admin.ui.screens.main
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,19 +14,15 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.example.shopease.feature_admin.ui.navigation.Screen
 import com.example.shopease.feature_admin.ui.screens.all.cart.CartScreen
 import com.example.shopease.feature_admin.ui.screens.all.home.HomeScreen
 import com.example.shopease.feature_admin.ui.screens.all.profile.ProfileScreen
 import com.example.shopease.feature_admin.ui.screens.all.search.SearchScreen
 import com.example.shopease.feature_admin.ui.viewModel.CommonViewModel
 import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
-import com.example.shopease.feature_common.components.AppMenuBtn
 import com.example.shopease.feature_common.components.AppScaffold
 import com.example.shopease.feature_common.components.CustomBottomBar
-import com.example.shopease.feature_common.components.CustomTopAppBar
 import com.example.shopease.feature_common.utils.ShopAppConstants
 import com.example.shopease.feature_common.utils.mapIconName
 
@@ -33,6 +31,7 @@ import com.example.shopease.feature_common.utils.mapIconName
 * */
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AdminScreen(
     navController: NavHostController,
@@ -74,7 +73,7 @@ fun AdminScreen(
         ) {
 
             when(activeTab) {
-                0 -> HomeScreen(homeScreenViewModel)
+                0 -> HomeScreen(navController,homeScreenViewModel)
                 1 -> CartScreen()
                 2 -> SearchScreen()
                 3 -> ProfileScreen()

@@ -1,8 +1,9 @@
 package com.example.shopease.feature_common.components
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -31,6 +31,7 @@ import com.example.shopease.feature_common.utils.productCategoryUrl
 import java.util.Locale
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ProductCategoryCard(productCategory: AllProductCategory) {
 
@@ -56,7 +57,7 @@ fun ProductCategoryCard(productCategory: AllProductCategory) {
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-                AsyncImageComponent(imageUrl = productCategoryUrl(productCategory.slug), width = 60, height = 50, color = generateRandomColor())
+                AsyncImageComponent(imageUrl = productCategoryUrl(productCategory.slug), modifier = Modifier.width(60.dp).height(50.dp), color = generateRandomColor())
                 Text(
                     text = productCategory.slug?.capitalize(Locale.ROOT) ?: "",
                     fontSize = 11.sp,

@@ -12,10 +12,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.core.graphics.toColor
-import retrofit2.http.Url
 import java.net.URL
-import java.util.Random
 
 
 fun mapIconName(item: String): ImageVector {

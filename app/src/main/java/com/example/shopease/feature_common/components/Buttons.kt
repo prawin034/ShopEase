@@ -1,21 +1,20 @@
 package com.example.shopease.feature_common.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.HorizontalDistribute
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -65,6 +64,27 @@ fun AppMenuBtn(
 
 
 @Composable
+fun BackIconButton(
+    onClick : () -> Unit
+){
+
+    IconButton(
+        onClick = {
+            onClick.invoke()
+        },
+        modifier = Modifier.size(46.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.ArrowBackIos,
+            contentDescription = "App menu btn",
+            tint = Color(ShopAppConstants.AppPrimaryColor),
+            modifier = Modifier.size(23.dp)
+        )
+    }
+}
+
+
+@Composable
 fun FilterBtn(
     onClick: () -> Unit
 ) {
@@ -107,5 +127,27 @@ fun FilterBtn(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         }
+    }
+}
+
+
+
+@Composable
+fun MoreIconButton(
+    onClick : () -> Unit
+){
+
+    IconButton(
+        onClick = {
+            onClick.invoke()
+        },
+        modifier = Modifier.size(46.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.MoreVert,
+            contentDescription = "App menu btn",
+            tint = Color(ShopAppConstants.AppPrimaryColor),
+            modifier = Modifier.size(23.dp)
+        )
     }
 }

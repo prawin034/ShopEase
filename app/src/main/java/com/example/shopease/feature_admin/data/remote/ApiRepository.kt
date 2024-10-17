@@ -47,6 +47,24 @@ class ApiRepository {
 
     }
 
+    suspend fun getSingleProduct(id:Int) : Result<Product> {
+        return  try {
+            val response = apiService.getSingleProduct(id)
+            if(response.isSuccessful) {
+                val shopEaseResponse = response.body()
+                if(shopEaseResponse !=null) Result.success(shopEaseResponse)
+                else Result.failure(Exception("Get  product based on  category response body is null"))
+            }
+            else{
+                Result.failure(Exception(" Request failed with code ${response.code()}"))
+            }
+
+        }catch (e:Exception){
+            Result.failure(Exception("Request failed: ${e.message}"))
+        }
+
+    }
+
 
 
 
