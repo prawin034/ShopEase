@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -15,11 +16,14 @@ import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.HorizontalDistribute
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +33,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.shopease.feature_common.utils.ShopAppConstants
 
 
@@ -148,6 +156,92 @@ fun MoreIconButton(
             contentDescription = "App menu btn",
             tint = Color(ShopAppConstants.AppPrimaryColor),
             modifier = Modifier.size(23.dp)
+        )
+    }
+}
+
+
+
+@Composable
+fun MinusButton(
+    onClick : () -> Unit
+){
+
+    IconButton(
+        colors = IconButtonDefaults.iconButtonColors(
+            containerColor = Color(ShopAppConstants.AppPrimaryColor)
+        ),
+        onClick = {
+            onClick.invoke()
+        },
+        modifier = Modifier.size(46.dp)
+    ) {
+        Text(
+            text = "-",
+            fontSize = 18.sp,
+            color = Color.White,
+            fontWeight = FontWeight.SemiBold
+        )
+    }
+}
+
+
+@Composable
+fun PlusButton(
+    onClick : () -> Unit
+){
+
+    IconButton(
+        colors = IconButtonDefaults.iconButtonColors(
+            containerColor = Color(ShopAppConstants.AppPrimaryColor)
+        ),
+        onClick = {
+            onClick.invoke()
+        },
+        modifier = Modifier.size(46.dp)
+    ) {
+        Text(
+            text = "+",
+            fontSize = 18.sp,
+            color = Color.White,
+            fontWeight = FontWeight.SemiBold
+        )
+    }
+}
+
+
+
+@Composable
+fun TxtButton(
+    text:String,
+    `font-size`: TextUnit,
+    backgroundColor: Color = Color(ShopAppConstants.AppPrimaryColor),
+    textColor : Color = Color.White,
+    modifier: Modifier = Modifier,
+    shape: RoundedCornerShape = RoundedCornerShape(12.dp),
+    enabled :Boolean = true,
+    contentPadding : PaddingValues = PaddingValues(5.dp),
+    onClick : () -> Unit
+){
+
+    TextButton(
+        modifier = modifier,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = backgroundColor
+        ),
+        shape = shape,
+        enabled = enabled,
+        contentPadding = contentPadding,
+        onClick = {
+            onClick.invoke()
+        }
+    ) {
+        Text(
+            text = text,
+            fontSize = `font-size`,
+            color = textColor,
+            fontWeight = FontWeight.SemiBold,
+            fontFamily = FontFamily.Monospace,
         )
     }
 }

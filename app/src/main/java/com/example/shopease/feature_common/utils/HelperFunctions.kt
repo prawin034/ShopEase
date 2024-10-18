@@ -13,6 +13,8 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
 import java.net.URL
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 fun mapIconName(item: String): ImageVector {
@@ -87,5 +89,15 @@ fun generateRandomColor() :androidx.compose.ui.graphics.Color {
     val argbColor = Color.argb(alpha, red, green, blue)
 
     return  androidx.compose.ui.graphics.Color(argbColor)
+
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun parseData(date: String): String {
+
+    val dateParse = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME)
+
+    return dateParse.format(DateTimeFormatter.ofPattern("dd-MM-yyy"))
 
 }

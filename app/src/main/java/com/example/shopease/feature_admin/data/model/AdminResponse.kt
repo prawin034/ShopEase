@@ -26,7 +26,7 @@ data class Product(
     val rating: Double,
     val stock: Int,
     val tags: List<String>,
-    val brand: String,
+    val brand: String?,
     val sku: String,
     val weight: Int,
     val dimensions: Dimensions,

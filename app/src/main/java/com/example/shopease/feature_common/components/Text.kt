@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -26,6 +28,7 @@ import com.example.shopease.feature_common.utils.ShopAppConstants
 
 @Composable
 fun SectionTitleTxt(
+    modifier: Modifier =Modifier,
     title:String,
     fontSize: Int = 15,
     color : Color = Color(ShopAppConstants.AppPrimaryTextColor)
@@ -37,9 +40,52 @@ fun SectionTitleTxt(
         fontWeight = FontWeight.SemiBold,
         fontFamily = FontFamily.Monospace,
         letterSpacing = 3.sp,
+        color = color,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun ProductText(
+    title:String,
+    fontSize: Int = 10,
+    color : Color = Color.White,
+    fontFamily: FontFamily = FontFamily.SansSerif
+){
+
+    Text(
+        text = title,
+        fontSize = fontSize.sp,
+        fontWeight = FontWeight.SemiBold,
+        fontFamily = fontFamily,
+        letterSpacing = 2.sp,
+        maxLines = 1,
         color = color
     )
 }
+
+@Composable
+fun ProductTextHeader(
+    title:String,
+    fontSize: Int = 8,
+    color : Color = Color.LightGray
+){
+
+
+    Text(
+        text = title.uppercase(),
+        fontSize = fontSize.sp,
+        fontWeight = FontWeight.SemiBold,
+        fontFamily = FontFamily.SansSerif,
+        overflow = TextOverflow.Ellipsis,
+        letterSpacing = 1.sp,
+        color = color
+    )
+}
+
+
+
+
 
 @Composable
 fun HeaderText(
@@ -181,4 +227,31 @@ fun BadgeLabel(
             overflow = TextOverflow.Ellipsis
         )
     }
+}
+
+
+
+@Composable
+fun SpacerCommon(modifier: Modifier = Modifier.height(10.dp) ){
+    Spacer(modifier = modifier )
+}
+
+
+@Composable
+fun AppTxt(
+    title:String,
+    fontSize: Int = 10,
+    color : Color = Color.Black,
+    fontFamily: FontFamily = FontFamily.SansSerif
+){
+
+    Text(
+        text = title,
+        fontSize = fontSize.sp,
+        fontWeight = FontWeight.SemiBold,
+        fontFamily = fontFamily,
+        letterSpacing = 2.sp,
+        maxLines = 1,
+        color = color
+    )
 }
