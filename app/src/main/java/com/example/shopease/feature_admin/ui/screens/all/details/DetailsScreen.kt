@@ -32,6 +32,8 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -86,20 +88,21 @@ fun DetailsScreen(
 ) {
     
     
-    val product = homeScreenViewModel.getSingleProduct
+    val product by homeScreenViewModel.getSingleProduct.observeAsState(initial = emptyList())
     
     LaunchedEffect(Unit){
-        
+
         if(id !=null){
             homeScreenViewModel.getSingleProduct(id)
         }
-        
+
     }
-    
-    
+
+
     AppScaffold(
         topAppBar = {
            CustomTopAppBar(
+               scrolledContainerColor = Color.LightGray,
                navigationIcon = {
                       BackIconButton {
                           
@@ -126,13 +129,11 @@ fun DetailsScreen(
     {
         
         
-        if(product.isNotEmpty()) {
-        DetailProduct(navController,homeScreenViewModel,product)
+        if(product?.isNotEmpty() == true) {
+        DetailProduct(navController,homeScreenViewModel, product!!)
         }
-        else {
-            LinearProgressIndicator()
-        }
-        
+
+
 
         
     }

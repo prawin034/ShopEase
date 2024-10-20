@@ -75,7 +75,7 @@ fun AdminScreen(
             when(activeTab) {
                 0 -> HomeScreen(navController,homeScreenViewModel)
                 1 -> CartScreen()
-                2 -> SearchScreen()
+                2 -> SearchScreen(navController,homeScreenViewModel)
                 3 -> ProfileScreen()
             }
 

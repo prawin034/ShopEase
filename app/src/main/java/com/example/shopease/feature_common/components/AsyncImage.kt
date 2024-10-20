@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 
@@ -24,7 +25,7 @@ fun AsyncImageComponent(
     modifier: Modifier = Modifier
 
 ) {
-    val painter = rememberAsyncImagePainter(imageUrl)
+    val painter = rememberAsyncImagePainter(imageUrl, filterQuality = FilterQuality.Low)
     val painterState = painter.state
     Box() {
 

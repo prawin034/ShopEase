@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.HorizontalDistribute
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -73,6 +74,7 @@ fun AppMenuBtn(
 
 @Composable
 fun BackIconButton(
+    color: Color = Color(ShopAppConstants.AppPrimaryColor),
     onClick : () -> Unit
 ){
 
@@ -85,7 +87,7 @@ fun BackIconButton(
         Icon(
             imageVector = Icons.Default.ArrowBackIos,
             contentDescription = "App menu btn",
-            tint = Color(ShopAppConstants.AppPrimaryColor),
+            tint = color,
             modifier = Modifier.size(23.dp)
         )
     }
@@ -243,5 +245,24 @@ fun TxtButton(
             fontWeight = FontWeight.SemiBold,
             fontFamily = FontFamily.Monospace,
         )
+    }
+}
+
+
+@Composable
+fun CartIconBtn(
+    onClick : () -> Unit
+){
+
+    IconButton(
+        colors = IconButtonDefaults.iconButtonColors(
+            containerColor = Color(ShopAppConstants.AppPrimaryColor)
+        ),
+        onClick = {
+            onClick.invoke()
+        },
+        modifier = Modifier.size(46.dp)
+    ) {
+        Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "", tint = Color(ShopAppConstants.AppIconColor))
     }
 }

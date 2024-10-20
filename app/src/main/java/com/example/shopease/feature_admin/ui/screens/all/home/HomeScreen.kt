@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -20,14 +21,20 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.shopease.feature_admin.data.model.AllProductCategory
 import com.example.shopease.feature_admin.data.model.Product
 import com.example.shopease.feature_admin.ui.navigation.Screen
+import com.example.shopease.feature_admin.ui.screens.all.details.Avatar
 import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
 import com.example.shopease.feature_common.components.AppMenuBtn
 import com.example.shopease.feature_common.components.AppScaffold
@@ -43,6 +50,9 @@ import com.example.shopease.feature_common.components.SectionTitleTxt
 import com.example.shopease.feature_common.components.SeeAllText
 import com.example.shopease.feature_common.utils.ShopAppConstants
 import com.example.shopease.feature_common.utils.generateRandomColor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -51,31 +61,27 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
 
     // 1 -> Get All products Category
 
-    val getAllProductCategory = homeScreenViewModel.getAllProductCategory
-    val productBasedOnHotSales = homeScreenViewModel.getProductBasedOnHotSalesCategory
-    val productBasedOnBeauty = homeScreenViewModel.getProductBasedOnBeautyCategory
-    val productBasedOnFurniture = homeScreenViewModel.getProductBasedOnFurnitureCategory
-    val productBasedOnGrocery = homeScreenViewModel.getProductBasedOnGroceriesCategory
-    val productBasedOnWomenDress = homeScreenViewModel.getProductBasedOnWomens_dressesCategory
-
-    LaunchedEffect(Unit) {
-        homeScreenViewModel.getAllProductsCategory()
-        homeScreenViewModel.getProductBasedOnCategory("laptops")
-        homeScreenViewModel.getProductBasedOnBeautyCategory("beauty")
-        homeScreenViewModel.getProductBasedOnFurnitureCategory("furniture")
-        homeScreenViewModel.getProductBasedOnGroceryCategory("groceries")
-        homeScreenViewModel.getProductBasedOnWomenDressCategory("womens-dresses")
-
-    }
-
+    val getAllProductCategory by  homeScreenViewModel.getAllProductCategory.observeAsState(initial = emptyList())
+    val productBasedOnHotSales by homeScreenViewModel.getProductBasedOnHotSalesCategory.observeAsState(initial = emptyList())
+    val productBasedOnBeauty by homeScreenViewModel.getProductBasedOnBeautyCategory.observeAsState(emptyList())
+    val productBasedOnFurniture by  homeScreenViewModel.getProductBasedOnFurnitureCategory.observeAsState(initial = emptyList())
+    val productBasedOnGrocery by  homeScreenViewModel.getProductBasedOnGroceriesCategory.observeAsState(initial = emptyList())
+    val productBasedOnWomenDress by  homeScreenViewModel.getProductBasedOnWomens_dressesCategory.observeAsState(initial = emptyList())
 
     AppScaffold(
         topAppBar = {
                     CustomTopAppBar(
                         navigationIcon = {
-                             AppMenuBtn {
+                             Avatar(
+                                 name = "S",
+                                 fontFamily = FontFamily.Cursive,
+                                 fontSize = 17.sp,
+                                 modifier = Modifier
+                                     .size(50.dp)
+                                     .clickable {
 
-                             }
+                                     }
+                             )
                         },
                         titleContent = { /*TODO*/ }
                     ) {
@@ -112,7 +118,7 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
 
 
                 LazyRow(contentPadding = PaddingValues(horizontal = 10.dp)) {
-                    itemsIndexed(getAllProductCategory){_: Int, item: AllProductCategory ->
+                    itemsIndexed(getAllProductCategory ?: emptyList()){ _: Int, item: AllProductCategory ->
 
                         ProductCategoryCard(productCategory = item)
 
@@ -149,8 +155,8 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
 
                 }
                 // 3 -> Hot Sales
-                if(productBasedOnHotSales.isNotEmpty()) {
-                    CommonCategory(productBasedOnHotSales[0].products,navController)
+                if(productBasedOnHotSales?.isNotEmpty() == true) {
+                    CommonCategory(productBasedOnHotSales!![0].products,navController)
                 }
             }
 
@@ -175,8 +181,8 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
                 }
 
                 //4 -> Beauty
-                if(productBasedOnBeauty.isNotEmpty()) {
-                    CommonCategory(productBasedOnBeauty[0].products, navController)
+                if(productBasedOnBeauty?.isNotEmpty() == true) {
+                    CommonCategory(productBasedOnBeauty!![0].products, navController)
                 }
             }
 
@@ -200,8 +206,8 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
                     }
                 }
                 //4 -> Beauty
-                if(productBasedOnFurniture.isNotEmpty()) {
-                    CommonCategory(productBasedOnFurniture[0].products,navController)
+                if(productBasedOnFurniture?.isNotEmpty() == true) {
+                    CommonCategory(productBasedOnFurniture!![0].products,navController)
                 }
             }
 
@@ -226,8 +232,8 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
                     }
                 }
                 //4 -> Beauty
-                if(productBasedOnGrocery.isNotEmpty()) {
-                    CommonCategory(productBasedOnGrocery[0].products,navController)
+                if(productBasedOnGrocery?.isNotEmpty() == true) {
+                    CommonCategory(productBasedOnGrocery!![0].products,navController)
                 }
             }
 
@@ -250,8 +256,8 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
                     }
                 }
                 //4 -> Beauty
-                if(productBasedOnWomenDress.isNotEmpty()) {
-                    CommonCategory(productBasedOnWomenDress[0].products,navController)
+                if(productBasedOnWomenDress?.isNotEmpty() == true) {
+                    CommonCategory(productBasedOnWomenDress!![0].products,navController)
                 }
             }
 
@@ -267,15 +273,27 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CommonCategory(productBasedOnCategory: List<Product>,navController: NavController) {
+
+    val scope = rememberCoroutineScope()
     LazyRow(
         contentPadding = PaddingValues(horizontal = 0.dp, vertical = 10.dp)){
         itemsIndexed(productBasedOnCategory){index: Int, item: Product ->
 
-            Column(modifier = Modifier.clickable {
-                navController.navigate("${Screen.DetailsScreen.route}/${item.id}")
-            }.padding(horizontal = 10.dp)) {
+            Column(modifier = Modifier
+                .clickable {
+
+                    scope.launch {
+                        withContext(Dispatchers.Main) {
+                            navController.navigate("${Screen.DetailsScreen.route}/${item.id}")
+                        }
+                    }
+
+                }
+                .padding(horizontal = 10.dp)) {
 //0xFFF7F7FF
-                AsyncImageComponent(imageUrl = item.thumbnail, modifier = Modifier.width(200.dp).height(200.dp), color = generateRandomColor(),badgeAvailable = true, badgeName = item.availabilityStatus)
+                AsyncImageComponent(imageUrl = item.thumbnail, modifier = Modifier
+                    .width(200.dp)
+                    .height(200.dp), color = generateRandomColor(),badgeAvailable = true, badgeName = item.availabilityStatus)
                 CommonRow(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                     HeaderText(title = item.title, modifier = Modifier
                         .width(150.dp)

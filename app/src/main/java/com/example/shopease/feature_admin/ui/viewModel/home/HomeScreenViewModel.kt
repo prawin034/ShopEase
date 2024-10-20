@@ -1,52 +1,52 @@
 package com.example.shopease.feature_admin.ui.viewModel.home
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.shopease.feature_admin.data.model.AllProductCategory
 import com.example.shopease.feature_admin.data.model.Product
 import com.example.shopease.feature_admin.data.model.ProductCategory
 import com.example.shopease.feature_admin.data.remote.ApiRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class HomeScreenViewModel(val repository: ApiRepository) : ViewModel() {
-
-
-    private val _getAllProductsCategory = mutableStateListOf<AllProductCategory>()
-    val getAllProductCategory : List<AllProductCategory> get() = _getAllProductsCategory
-
-
-    private val _getProductBasedOnHotSalesCategory = mutableStateListOf<ProductCategory>()
-    val getProductBasedOnHotSalesCategory : List<ProductCategory> get() = _getProductBasedOnHotSalesCategory
-
-
-    // -> Beauty
-
-    private val _getProductBasedOnBeautyCategory = mutableStateListOf<ProductCategory>()
-    val getProductBasedOnBeautyCategory : List<ProductCategory> get() = _getProductBasedOnBeautyCategory
-
-
-    //-> Furniture
-
-    private val _getProductBasedOnFurnitureCategory = mutableStateListOf<ProductCategory>()
-    val getProductBasedOnFurnitureCategory : List<ProductCategory> get() = _getProductBasedOnFurnitureCategory
+class HomeScreenViewModel(
+    private val repository: ApiRepository
+) : ViewModel()
+{
 
 
 
-    //--> Grocery
-    private val _getProductBasedOnGroceriesCategory = mutableStateListOf<ProductCategory>()
-    val getProductBasedOnGroceriesCategory : List<ProductCategory> get() = _getProductBasedOnGroceriesCategory
 
 
 
-    private val _getProductBasedOnWomens_dressesCategory = mutableStateListOf<ProductCategory>()
-    val getProductBasedOnWomens_dressesCategory : List<ProductCategory> get() = _getProductBasedOnWomens_dressesCategory
+    private val _getAllProductsCategory = MutableLiveData<List<AllProductCategory>?>(emptyList())
+    val getAllProductCategory: LiveData<List<AllProductCategory>?> get() = _getAllProductsCategory
+
+    private val _getProductBasedOnHotSalesCategory = MutableLiveData<List<ProductCategory>?>(emptyList())
+    val getProductBasedOnHotSalesCategory: LiveData<List<ProductCategory>?> get() = _getProductBasedOnHotSalesCategory
+
+    private val _getProductBasedOnBeautyCategory = MutableLiveData<List<ProductCategory>?>(emptyList())
+    val getProductBasedOnBeautyCategory: LiveData<List<ProductCategory>?> get() = _getProductBasedOnBeautyCategory
+
+    private val _getProductBasedOnFurnitureCategory = MutableLiveData<List<ProductCategory>?>(emptyList())
+    val getProductBasedOnFurnitureCategory: LiveData<List<ProductCategory>?> get() = _getProductBasedOnFurnitureCategory
+
+    private val _getProductBasedOnGroceriesCategory = MutableLiveData<List<ProductCategory>?>(emptyList())
+    val getProductBasedOnGroceriesCategory: LiveData<List<ProductCategory>?> get() = _getProductBasedOnGroceriesCategory
+
+    private val _getProductBasedOnWomens_dressesCategory = MutableLiveData<List<ProductCategory>?>(emptyList())
+    val getProductBasedOnWomens_dressesCategory: LiveData<List<ProductCategory>?> get() = _getProductBasedOnWomens_dressesCategory
 
 
-    private val _getSingleProduct = mutableStateListOf<Product>()
-    val getSingleProduct :List<Product> get() = _getSingleProduct
+    private val _getSingleProduct = MutableLiveData<List<Product>?>()
+    val getSingleProduct :LiveData<List<Product>?> get() = _getSingleProduct
 
 
     private val _successMessage = mutableStateOf<String?>(null)
@@ -58,18 +58,35 @@ class HomeScreenViewModel(val repository: ApiRepository) : ViewModel() {
 
 
 
+    init {
+        getAllProductsCategory()
+        getProductBasedOnCategory("laptops")
+        getProductBasedOnBeautyCategory("beauty")
+        getProductBasedOnFurnitureCategory("furniture")
+        getProductBasedOnGroceryCategory("groceries")
+        getProductBasedOnWomenDressCategory("womens-dresses")
 
 
-    fun getAllProductsCategory()  {
+    }
+
+
+
+
+
+
+    private fun getAllProductsCategory()  {
         _successMessage.value = null
         _failureMessage.value = null
         viewModelScope.launch {
-            val result  = repository.getAllProductCategory()
+            val result = withContext(Dispatchers.IO) {
+                repository.getAllProductCategory()
+            }
+
             if(result.isSuccess) {
                 val response = result.getOrNull()
                 if(response !=null) {
-                    _getAllProductsCategory.clear()
-                    _getAllProductsCategory.addAll(response)
+
+                    _getAllProductsCategory.postValue(response)
                     _successMessage.value = "SuccessFully loaded"
                 }
                 else {
@@ -87,12 +104,14 @@ class HomeScreenViewModel(val repository: ApiRepository) : ViewModel() {
 
     fun getProductBasedOnCategory(category:String){
         viewModelScope.launch {
-            val result = repository.getProductBasedOnCategory(category)
+            val result = withContext(Dispatchers.IO) {
+                repository.getProductBasedOnCategory(category)
+            }
             if(result.isSuccess) {
                 val response = result.getOrNull()
                 if(response !=null) {
-                    _getProductBasedOnHotSalesCategory.clear()
-                    _getProductBasedOnHotSalesCategory.add(response)
+
+                    _getProductBasedOnHotSalesCategory.postValue(listOf(response))
 
                 }
             }
@@ -101,12 +120,15 @@ class HomeScreenViewModel(val repository: ApiRepository) : ViewModel() {
 
     fun getProductBasedOnBeautyCategory(category:String){
         viewModelScope.launch {
-            val result = repository.getProductBasedOnCategory(category)
+
+            val result = withContext(Dispatchers.IO) {
+                repository.getProductBasedOnCategory(category)
+            }
             if(result.isSuccess) {
                 val response = result.getOrNull()
                 if(response !=null) {
-                    _getProductBasedOnBeautyCategory.clear()
-                    _getProductBasedOnBeautyCategory.add(response)
+
+                    _getProductBasedOnBeautyCategory.postValue(listOf(response))
 
                 }
             }
@@ -115,12 +137,14 @@ class HomeScreenViewModel(val repository: ApiRepository) : ViewModel() {
 
     fun getProductBasedOnFurnitureCategory(category:String){
         viewModelScope.launch {
-            val result = repository.getProductBasedOnCategory(category)
+            val result = withContext(Dispatchers.IO) {
+                repository.getProductBasedOnCategory(category)
+            }
             if(result.isSuccess) {
                 val response = result.getOrNull()
                 if(response !=null) {
-                    _getProductBasedOnFurnitureCategory.clear()
-                    _getProductBasedOnFurnitureCategory.add(response)
+
+                    _getProductBasedOnFurnitureCategory.postValue(listOf(response))
 
                 }
             }
@@ -129,12 +153,14 @@ class HomeScreenViewModel(val repository: ApiRepository) : ViewModel() {
 
     fun getProductBasedOnGroceryCategory(category:String){
         viewModelScope.launch {
-            val result = repository.getProductBasedOnCategory(category)
+            val result = withContext(Dispatchers.IO) {
+                repository.getProductBasedOnCategory(category)
+            }
             if(result.isSuccess) {
                 val response = result.getOrNull()
                 if(response !=null) {
-                    _getProductBasedOnGroceriesCategory.clear()
-                    _getProductBasedOnGroceriesCategory.add(response)
+
+                    _getProductBasedOnGroceriesCategory.postValue(listOf(response))
 
                 }
             }
@@ -142,12 +168,14 @@ class HomeScreenViewModel(val repository: ApiRepository) : ViewModel() {
     }
     fun getProductBasedOnWomenDressCategory(category:String){
         viewModelScope.launch {
-            val result = repository.getProductBasedOnCategory(category)
+            val result = withContext(Dispatchers.IO) {
+                repository.getProductBasedOnCategory(category)
+            }
             if(result.isSuccess) {
                 val response = result.getOrNull()
                 if(response !=null) {
-                    _getProductBasedOnWomens_dressesCategory.clear()
-                    _getProductBasedOnWomens_dressesCategory.add(response)
+
+                    _getProductBasedOnWomens_dressesCategory.postValue(listOf(response))
 
                 }
             }
@@ -155,23 +183,41 @@ class HomeScreenViewModel(val repository: ApiRepository) : ViewModel() {
     }
 
 
-
-    fun getSingleProduct(id:Int){
+    fun getSingleProduct(id: Int) {
         viewModelScope.launch {
-            val result = repository.getSingleProduct(id)
-            if(result.isSuccess) {
-                val response = result.getOrNull()
-                if(response !=null) {
-                    _getSingleProduct.clear()
-                    _getSingleProduct.add(response)
+            val result = withContext(Dispatchers.IO) { repository.getSingleProduct(id) }
+
+            if (result.isSuccess) {
+                result.getOrNull()?.let { response ->
+                    _getSingleProduct.postValue(listOf(response)) // assuming _getSingleProduct is MutableLiveData<Product?>
                 }
-            }
-            else{
+            } else {
                 val exception = result.exceptionOrNull()
-                _failureMessage.value = "Failed ${exception?.message}"
+                _failureMessage.value = "Failed: ${exception?.localizedMessage ?: "Unknown Error"}"
             }
         }
     }
+
+
+//    fun getSingleProduct(id:Int){
+//        viewModelScope.launch(Dispatchers.IO) {
+//            val result = repository.getSingleProduct(id)
+//            if(result.isSuccess) {
+//                val response = result.getOrNull()
+//                if(response !=null) {
+//                    withContext(Dispatchers.Main) {
+//                        _getSingleProduct.clear()
+//                        _getSingleProduct.add(response)
+//                    }
+//
+//                }
+//            }
+//            else{
+//                val exception = result.exceptionOrNull()
+//                _failureMessage.value = "Failed ${exception?.message}"
+//            }
+//        }
+//    }
 
 }
 

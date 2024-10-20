@@ -76,7 +76,6 @@ fun productCategoryUrl(slug: String?): String {
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun generateRandomColor() :androidx.compose.ui.graphics.Color {
-
     val random = kotlin.random.Random
 
     // Generate random ARGB values
