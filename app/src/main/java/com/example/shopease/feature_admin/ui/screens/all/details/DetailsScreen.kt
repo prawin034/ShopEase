@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
@@ -28,6 +29,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -79,6 +81,7 @@ import com.example.shopease.feature_common.utils.parseData
 import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DetailsScreen(
@@ -100,28 +103,29 @@ fun DetailsScreen(
 
 
     AppScaffold(
+
         topAppBar = {
            CustomTopAppBar(
-               scrolledContainerColor = Color.LightGray,
+
                navigationIcon = {
-                      BackIconButton {
+                      BackIconButton(color = Color.Black) {
                           
                       }          
                },
                titleContent = {
-                       SectionTitleTxt(title = "Details Products")
+                       SectionTitleTxt(title = "Details Products", color = Color.Black)
                },
                actions = {
-                   MoreIconButton {
+                   MoreIconButton(color = Color.Black) {
 
                    }
                }
            )        
         },
         bottomAppBar = {
-            BottomAppBar {
+
                 AddToCartBottomBar()
-            }
+
 
 
         },
@@ -130,7 +134,7 @@ fun DetailsScreen(
         
         
         if(product?.isNotEmpty() == true) {
-        DetailProduct(navController,homeScreenViewModel, product!!)
+        DetailProduct(navController,homeScreenViewModel, product!!,it)
         }
 
 
@@ -149,12 +153,13 @@ fun DetailsScreen(
 fun DetailProduct(
     navController: NavHostController,
     homeScreenViewModel: HomeScreenViewModel,
-    product: List<Product>
+    product: List<Product>,
+    it:PaddingValues
 ) {
 
     val scope = rememberCoroutineScope()
     val showFullText = remember { mutableStateOf(true) }
-    LazyColumn {
+    LazyColumn(contentPadding = it) {
         itemsIndexed(product){index: Int, item: Product ->
             val pager = rememberPagerState(initialPage = 0, pageCount = { item.images.size })
             
@@ -390,12 +395,12 @@ fun Reviews(reviews: List<Review>) {
                CommonRow {
                    Avatar(name = item.reviewerName)
                    Column(modifier = Modifier.padding(horizontal = 4.dp),verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.Start) {
-                       AppTxt(title = item.reviewerName,)
+                       AppTxt(text = item.reviewerName,)
                    }
                }
 
                 Row {
-                    AppTxt(title = parseData(item.date), color = Color(ShopAppConstants.AppSecondaryTextColor))
+                    AppTxt(text = parseData(item.date), textColor = Color(ShopAppConstants.AppSecondaryTextColor))
                 }
 
             }
@@ -543,9 +548,10 @@ fun ProductInformation(item: Product) {
 fun AddToCartBottomBar() {
 
     CommonRow(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.background(color = Color(ShopAppConstants.cardLightColor)).fillMaxWidth().navigationBarsPadding(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceAround
+        horizontalArrangement = Arrangement.SpaceAround,
+        enableDefaultPadding = true
     ) {
 
         Row(modifier = Modifier.fillMaxWidth(0.4f), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {

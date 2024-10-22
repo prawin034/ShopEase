@@ -20,7 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.shopease.feature_common.utils.ShopAppConstants
@@ -239,19 +241,25 @@ fun SpacerCommon(modifier: Modifier = Modifier.height(10.dp) ){
 
 @Composable
 fun AppTxt(
-    title:String,
-    fontSize: Int = 10,
-    color : Color = Color.Black,
-    fontFamily: FontFamily = FontFamily.SansSerif
+    text: String,
+    textColor: Color = Color.Black,
+    enabled: Boolean = true,
+    fontSize: TextUnit = 13.sp,
+    fontWeight: FontWeight = FontWeight.SemiBold,
+    fontFamily: FontFamily = FontFamily.SansSerif,
+    textAlign: TextAlign = TextAlign.Start,
+    modifier: Modifier = Modifier
 ){
 
     Text(
-        text = title,
-        fontSize = fontSize.sp,
+        text = text,
+        fontSize = fontSize,
         fontWeight = FontWeight.SemiBold,
         fontFamily = fontFamily,
         letterSpacing = 2.sp,
         maxLines = 1,
-        color = color
+        color = textColor,
+        textAlign = textAlign,
+        modifier = modifier
     )
 }

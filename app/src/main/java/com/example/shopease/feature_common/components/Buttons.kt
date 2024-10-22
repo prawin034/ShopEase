@@ -3,10 +3,12 @@ package com.example.shopease.feature_common.components
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,11 +19,13 @@ import androidx.compose.material.icons.filled.HorizontalDistribute
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -33,9 +37,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -144,6 +150,7 @@ fun FilterBtn(
 
 @Composable
 fun MoreIconButton(
+    color: Color = Color(ShopAppConstants.AppPrimaryColor),
     onClick : () -> Unit
 ){
 
@@ -156,7 +163,7 @@ fun MoreIconButton(
         Icon(
             imageVector = Icons.Default.MoreVert,
             contentDescription = "App menu btn",
-            tint = Color(ShopAppConstants.AppPrimaryColor),
+            tint = color,
             modifier = Modifier.size(23.dp)
         )
     }
@@ -265,4 +272,77 @@ fun CartIconBtn(
     ) {
         Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "", tint = Color(ShopAppConstants.AppIconColor))
     }
+}
+
+
+
+
+
+
+
+@Composable
+fun PrimaryActionBtn(
+    text: String,
+    textColor: Color = Color.White,
+    enabled: Boolean = true,
+    fontSize: TextUnit = 13.sp,
+    fontWeight: FontWeight = FontWeight.SemiBold,
+    fontFamily: FontFamily = FontFamily.SansSerif,
+    buttonColors: ButtonColors = ButtonDefaults.buttonColors(
+        containerColor = Color(ShopAppConstants.AppPrimaryColor),
+        contentColor = Color.White,
+    ),
+    shape: RoundedCornerShape = RoundedCornerShape(14.dp),
+    contentPadding: PaddingValues = PaddingValues(7.dp),
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    modifier : Modifier = Modifier,
+    onClick: () -> Unit,
+){
+
+    TextButton(
+        colors  = buttonColors,
+        enabled = enabled,
+        shape = shape,
+        contentPadding = contentPadding,
+        interactionSource = interactionSource,
+        modifier = modifier,
+        onClick = {
+        onClick.invoke()
+    }) {
+        Text(
+            textAlign = TextAlign.Center,
+            text = text,
+            color = textColor,
+            fontSize = fontSize,
+            fontWeight = fontWeight,
+            fontFamily = fontFamily,
+
+        )
+    }
+}
+
+
+
+@Composable
+fun iconBtn(
+    icon:ImageVector,
+    iconColor:Color = Color.Black,
+    enabled: Boolean = true,
+    colors: IconButtonColors ,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+){
+
+    IconButton(
+        modifier = modifier,
+        enabled = enabled,
+        colors = colors,
+        onClick = {
+            onClick.invoke()
+        }
+    )
+    {
+      Icon(imageVector = icon, contentDescription = "", tint = iconColor )
+    }
+
 }

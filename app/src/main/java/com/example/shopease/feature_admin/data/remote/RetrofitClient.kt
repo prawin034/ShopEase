@@ -1,5 +1,8 @@
 package com.example.shopease.feature_admin.data.remote
 
+import android.content.Context
+import com.example.shopease.feature_admin.data.remote.interceptors.HeaderInterceptor
+import com.example.shopease.feature_login.dataStore.getToken
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -17,10 +20,10 @@ object RetrofitClient {
     // 2 -> OkhttpClient
 
 
-    fun okhttpClient(): OkHttpClient {
-
+    private fun okhttpClient(context: Context): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(HeaderInterceptor(getToken(context)))
             .readTimeout(10L, TimeUnit.SECONDS)
             .writeTimeout(10L, TimeUnit.SECONDS)
             .connectTimeout(10L, TimeUnit.SECONDS)
@@ -29,17 +32,19 @@ object RetrofitClient {
 
 
 
-     val retrofitInstance : ApiService  by lazy {
-        createRetrofitClient()
-    }
+//     val retrofitInstance : ApiService by lazy {
+//        createRetrofitClient()
+//    }
 
 
-    fun createRetrofitClient() : ApiService {
+
+
+    fun createRetrofitClient(context: Context) : ApiService {
 
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(okhttpClient())
+            .client(okhttpClient(context))
             .build()
 
         return  retrofit.create(ApiService::class.java)

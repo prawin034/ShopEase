@@ -14,11 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShopEase"
         android:enableOnBackInvokedCallback="true"
+
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
+            android:screenOrientation="unspecified"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:theme="@style/Theme.ShopEase">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

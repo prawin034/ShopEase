@@ -22,7 +22,7 @@ fun CommonRow(
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     content: @Composable () -> Unit
 ){
-    val paddingValues = if(enableDefaultPadding)  PaddingValues(10.dp) else paddingValues
+    val paddingValues = if(enableDefaultPadding)  PaddingValues(5.dp) else paddingValues
 
    Row(
        modifier = modifier

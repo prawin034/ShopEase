@@ -1,8 +1,9 @@
 package com.example.shopease.feature_common.utils
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.Icons
@@ -11,7 +12,11 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import com.example.shopease.feature_admin.navigation.Screen
 import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -75,7 +80,7 @@ fun productCategoryUrl(slug: String?): String {
 
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun generateRandomColor() :androidx.compose.ui.graphics.Color {
+fun generateRandomColor() : Color {
     val random = kotlin.random.Random
 
     // Generate random ARGB values
@@ -85,9 +90,9 @@ fun generateRandomColor() :androidx.compose.ui.graphics.Color {
     val blue = random.nextInt(256) // 0 to 255
 
 
-    val argbColor = Color.argb(alpha, red, green, blue)
+    val argbColor = android.graphics.Color.argb(alpha, red, green, blue)
 
-    return  androidx.compose.ui.graphics.Color(argbColor)
+    return  Color(argbColor)
 
 }
 
@@ -100,3 +105,22 @@ fun parseData(date: String): String {
     return dateParse.format(DateTimeFormatter.ofPattern("dd-MM-yyy"))
 
 }
+
+
+
+
+
+fun statusBarColor() : Color {
+
+
+    return  when {
+         Screen.AdminScreen.route.toBoolean() -> Color(android.graphics.Color.WHITE)
+        Screen.DetailsScreen.route.toBoolean() -> Color(ShopAppConstants.AppPrimaryColor)
+        else -> Color(android.graphics.Color.WHITE)
+    }
+}
+
+
+
+
+

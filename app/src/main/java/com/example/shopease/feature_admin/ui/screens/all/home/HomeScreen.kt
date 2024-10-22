@@ -19,6 +19,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -33,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.shopease.feature_admin.data.model.AllProductCategory
 import com.example.shopease.feature_admin.data.model.Product
-import com.example.shopease.feature_admin.ui.navigation.Screen
+import com.example.shopease.feature_admin.navigation.Screen
 import com.example.shopease.feature_admin.ui.screens.all.details.Avatar
 import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
 import com.example.shopease.feature_common.components.AppMenuBtn
@@ -55,6 +57,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewModel){
@@ -68,9 +71,16 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
     val productBasedOnGrocery by  homeScreenViewModel.getProductBasedOnGroceriesCategory.observeAsState(initial = emptyList())
     val productBasedOnWomenDress by  homeScreenViewModel.getProductBasedOnWomens_dressesCategory.observeAsState(initial = emptyList())
 
+
+//
+
+
     AppScaffold(
         topAppBar = {
                     CustomTopAppBar(
+                        colors = TopAppBarDefaults.topAppBarColors(
+                           containerColor = Color.White
+                        ),
                         navigationIcon = {
                              Avatar(
                                  name = "S",
@@ -90,12 +100,16 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
         },
         bottomAppBar = { /*TODO*/ },
         floatingButton = { /*TODO*/ })
-    {
+    { it ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(top = 20.dp),
+                .padding(it)
+
+                .verticalScroll(
+                    rememberScrollState()
+                )
+                .padding(top = 5.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
