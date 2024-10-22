@@ -1,5 +1,6 @@
 package com.example.shopease.feature_admin.data.remote.interceptors
 
+import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -12,6 +13,10 @@ class HeaderInterceptor(private val token :String?) : Interceptor {
         }
         newRequest.addHeader("Content-Type", "application/json")
 
-        return chain.proceed(newRequest.build())
+        val buildRequest = newRequest.build()
+        for(header in buildRequest.headers) {
+            Log.d("Headers","$header")
+        }
+        return chain.proceed(buildRequest)
     }
 }

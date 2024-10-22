@@ -9,7 +9,9 @@ import com.example.shopease.feature_admin.data.remote.ApiRepository
 import com.example.shopease.feature_login.dataStore.saveToken
 import com.example.shopease.feature_login.model.loginRequest
 import com.example.shopease.feature_login.model.loginResponse
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginViewModel(private val repository: ApiRepository) : ViewModel() {
 
@@ -30,8 +32,8 @@ class LoginViewModel(private val repository: ApiRepository) : ViewModel() {
     }
 
 
-    private val _loginResponse = MutableLiveData<loginResponse?>()
-    val loginResponse : LiveData<loginResponse?> get() = _loginResponse
+    private val _loginResponse = MutableLiveData<List<loginResponse>?>()
+    val loginResponse : LiveData<List<loginResponse>?> get() = _loginResponse
 
 
     private val _successMessage = MutableLiveData<String?>(null)
@@ -41,28 +43,27 @@ class LoginViewModel(private val repository: ApiRepository) : ViewModel() {
     private val _failureMessage = MutableLiveData<String?>(null)
     val failureMessage : LiveData<String?> get() = _failureMessage
 
-    fun login(context: Context,payload:loginRequest,callBack : (Boolean) -> Unit ) {
+    fun login(context: Context, payload: loginRequest, callBack: (Boolean) -> Unit) {
         _successMessage.value = null
-        _failureMessage.value =null
-        viewModelScope.launch {
-            val result = repository.login(payload)
-            if(result.isSuccess) {
-                val response = result.getOrNull()
-                if(response !=null) {
-                    _successMessage.value = "Successfully loaded response"
-                    callBack(true)
-                    _loginResponse.postValue(response)
-                    saveToken(context,response.accessToken)
-                }
-                else {
-                    _failureMessage.value = "Failed to load: response is null"
-                }
+        _failureMessage.value = null
+        viewModelScope.launch(Dispatchers.Main) {
+
+            val result = withContext(Dispatchers.IO) {
+                repository.login(payload)
             }
-            else {
-                val exception = result.exceptionOrNull()
-                _failureMessage.value = "Failed: ${exception?.message ?: "Unknown error"}"
+            if (result.isSuccess) {
+                result.getOrNull()?.let {
+                    _successMessage.value = "Login SuccessFull"
+                    callBack(true)
+                    _loginResponse.postValue(listOf(it))
+                    saveToken(context, it.accessToken)
+                }
+            } else {
+                _failureMessage.value = "failed to login"
             }
         }
+
     }
+
 
 }

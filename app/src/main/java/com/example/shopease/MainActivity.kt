@@ -20,6 +20,8 @@ import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
 import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModelFactory
 import com.example.shopease.feature_login.ui.viewModel.loginViewModel.LoginViewModel
 import com.example.shopease.feature_login.ui.viewModel.loginViewModel.LoginViewModelFactory
+import com.example.shopease.feature_login.ui.viewModel.registrationViewModel.RegistrationViewModel
+import com.example.shopease.feature_login.ui.viewModel.registrationViewModel.RegistrationViewModelFactory
 import com.example.shopease.ui.theme.ShopEaseTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,6 +29,7 @@ class MainActivity : ComponentActivity() {
     private val commonViewModel by viewModels<CommonViewModel>()
     private lateinit var homeScreenViewModel : HomeScreenViewModel
     private lateinit var loginViewModel: LoginViewModel
+    private lateinit var  registrationViewModel: RegistrationViewModel
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,11 +41,13 @@ class MainActivity : ComponentActivity() {
         //viewModelFactory
         val factory = HomeScreenViewModelFactory(apiRepository)
         val loginFactory = LoginViewModelFactory(apiRepository)
+        val registerFactory = RegistrationViewModelFactory(apiRepository)
 
         //create viewModel
 
         homeScreenViewModel = ViewModelProvider(owner = this, factory = factory)[HomeScreenViewModel::class.java]
         loginViewModel = ViewModelProvider(this, factory = loginFactory)[LoginViewModel::class.java]
+        registrationViewModel = ViewModelProvider(this,registerFactory)[RegistrationViewModel::class.java]
        WindowCompat.setDecorFitsSystemWindows(window,false)
       // enableEdgeToEdge()
         setContent {
@@ -51,7 +56,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                   App(commonViewModel, homeScreenViewModel,loginViewModel)
+                   App(commonViewModel, homeScreenViewModel,loginViewModel,registrationViewModel)
                 }
             }
         }

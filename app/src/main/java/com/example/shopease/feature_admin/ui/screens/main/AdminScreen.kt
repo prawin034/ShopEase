@@ -25,6 +25,7 @@ import com.example.shopease.feature_common.components.AppScaffold
 import com.example.shopease.feature_common.components.CustomBottomBar
 import com.example.shopease.feature_common.utils.ShopAppConstants
 import com.example.shopease.feature_common.utils.mapIconName
+import com.example.shopease.feature_login.ui.viewModel.loginViewModel.LoginViewModel
 
 
 /* This screen acts as the main screen of whole application basically the entry point gateway for the application
@@ -36,7 +37,8 @@ import com.example.shopease.feature_common.utils.mapIconName
 fun AdminScreen(
     navController: NavHostController,
     commonViewModel: CommonViewModel,
-    homeScreenViewModel: HomeScreenViewModel
+    homeScreenViewModel: HomeScreenViewModel,
+    loginViewModel: LoginViewModel,
 ) {
 
     val bottomList = listOf<String>("Home","Cart","Search","Profile")
@@ -76,7 +78,7 @@ fun AdminScreen(
                 0 -> HomeScreen(navController,homeScreenViewModel)
                 1 -> CartScreen()
                 2 -> SearchScreen(navController,homeScreenViewModel)
-                3 -> ProfileScreen()
+                3 -> ProfileScreen(navController,loginViewModel)
             }
 
 

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
@@ -41,7 +42,8 @@ fun LandingScreen(navController: NavController){
 
     Surface(modifier = Modifier
         .fillMaxSize()
-        .windowInsetsPadding(insets = WindowInsets(0.dp))) {
+        .windowInsetsPadding(insets = WindowInsets(0.dp))
+    ) {
         Box(modifier = Modifier,) {
 
             Image(

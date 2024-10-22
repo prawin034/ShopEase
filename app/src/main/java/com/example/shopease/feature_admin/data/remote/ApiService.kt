@@ -3,6 +3,7 @@ package com.example.shopease.feature_admin.data.remote
 import com.example.shopease.feature_admin.data.model.AllProductCategory
 import com.example.shopease.feature_admin.data.model.Product
 import com.example.shopease.feature_admin.data.model.ProductCategory
+import com.example.shopease.feature_login.model.RegisterRequest
 import com.example.shopease.feature_login.model.loginRequest
 import com.example.shopease.feature_login.model.loginResponse
 import retrofit2.Response
@@ -19,8 +20,11 @@ interface ApiService {
 
      */
 
-    @POST("/user/login")
+    @POST("/auth/login")
     suspend fun login(@Body payload : loginRequest) : Response<loginResponse>
+
+    @POST("/users/add")
+    suspend fun register(@Body payload:RegisterRequest) :Response<RegisterRequest>
 
 
 

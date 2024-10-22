@@ -21,7 +21,9 @@ import com.example.shopease.feature_admin.ui.viewModel.CommonViewModel
 import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
 import com.example.shopease.feature_login.ui.screens.landingScreeen.LandingScreen
 import com.example.shopease.feature_login.ui.screens.loginScreen.LoginScreen
+import com.example.shopease.feature_login.ui.screens.resgistrationScreen.RegistrationScreen
 import com.example.shopease.feature_login.ui.viewModel.loginViewModel.LoginViewModel
+import com.example.shopease.feature_login.ui.viewModel.registrationViewModel.RegistrationViewModel
 
 
 /* Navigation
@@ -32,20 +34,21 @@ This is basically the navigation for all screens
 fun App(
     commonViewModel: CommonViewModel,
     homeScreenViewModel: HomeScreenViewModel,
-    loginViewModel: LoginViewModel
+    loginViewModel: LoginViewModel,
+    registrationViewModel: RegistrationViewModel
 ) {
 
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
-        startDestination = Screen.AdminScreen.route
+        startDestination = Screen.LoginScreen.route
     ) {
 
         composable(
             route = Screen.AdminScreen.route,
         ) {
-            AdminScreen(navController,commonViewModel,homeScreenViewModel)
+            AdminScreen(navController,commonViewModel,homeScreenViewModel,loginViewModel )
         }
 
         composable(
@@ -107,6 +110,32 @@ fun App(
             }
         ) {
             LoginScreen(navController,loginViewModel)
+        }
+
+
+        composable(route = Screen.RegistrationScreen.route,
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                ) + slideIntoContainer(
+                    animationSpec = tween(300, easing = EaseIn),
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                ) + slideOutOfContainer(
+                    animationSpec = tween(300, easing = EaseOut),
+                    towards = AnimatedContentTransitionScope.SlideDirection.End
+                )
+            }
+        ) {
+            RegistrationScreen(navController,registrationViewModel)
         }
 
 

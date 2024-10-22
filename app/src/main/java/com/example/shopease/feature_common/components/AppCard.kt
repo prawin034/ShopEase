@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,7 +18,7 @@ import com.example.shopease.feature_common.utils.ShopAppConstants
 @Composable
 fun AppCard(
     modifier: Modifier = Modifier,
-
+    colors :CardColors = CardDefaults.cardColors(containerColor = Color(ShopAppConstants.AppPrimaryColor)),
     paddingValues: PaddingValues = PaddingValues(0.dp),
     enableDefaultPadding : Boolean = false,
     shape: RoundedCornerShape = RoundedCornerShape(topStart = 12.dp , topEnd = 12.dp, bottomStart = 12.dp, bottomEnd = 12.dp),
@@ -26,7 +27,7 @@ fun AppCard(
 {
     val padding = if(enableDefaultPadding) PaddingValues(9.dp, 4.dp, 9.dp, 4.dp) else paddingValues
     Card(
-        colors = CardDefaults.cardColors(containerColor =  Color(ShopAppConstants.AppCardColor)),
+        colors = colors,
         modifier = modifier
             .fillMaxWidth()
             .padding(padding)

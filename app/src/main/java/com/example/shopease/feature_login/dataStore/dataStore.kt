@@ -5,7 +5,7 @@ import android.content.Context
 
 fun saveToken(context: Context, token:String) {
     val sharedPrefs = context.getSharedPreferences("My_Prefs", Context.MODE_PRIVATE)
-    val editor = sharedPrefs.edit()
+    sharedPrefs.edit()
         .putString("ACCESS_TOKEN",token)
         .apply()
 }

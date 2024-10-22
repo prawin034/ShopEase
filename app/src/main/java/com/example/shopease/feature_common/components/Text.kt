@@ -33,7 +33,7 @@ fun SectionTitleTxt(
     modifier: Modifier =Modifier,
     title:String,
     fontSize: Int = 15,
-    color : Color = Color(ShopAppConstants.AppPrimaryTextColor)
+    color : Color = Color(ShopAppConstants.AppPrimaryTextColor),
 ){
 
     Text(
@@ -243,20 +243,20 @@ fun SpacerCommon(modifier: Modifier = Modifier.height(10.dp) ){
 fun AppTxt(
     text: String,
     textColor: Color = Color.Black,
-    enabled: Boolean = true,
     fontSize: TextUnit = 13.sp,
     fontWeight: FontWeight = FontWeight.SemiBold,
     fontFamily: FontFamily = FontFamily.SansSerif,
     textAlign: TextAlign = TextAlign.Start,
+    letterSpacing: TextUnit = 2.sp,
     modifier: Modifier = Modifier
 ){
 
     Text(
         text = text,
         fontSize = fontSize,
-        fontWeight = FontWeight.SemiBold,
+        fontWeight = fontWeight,
         fontFamily = fontFamily,
-        letterSpacing = 2.sp,
+        letterSpacing = letterSpacing,
         maxLines = 1,
         color = textColor,
         textAlign = textAlign,
