@@ -67,3 +67,30 @@ data class ProductPager(
     val id: Int,
     val url: String,
 )
+
+
+data class AddToCartResponse(
+    val id :Int,
+    val products: List<CartResponseList>,
+    val total : Double,
+    val discountedTotal : Double,
+    val userId : Int,
+    val totalProducts : Int,
+    val totalQuantity : Int
+
+)
+
+
+
+
+
+data class CartResponseList(
+    val id : Int,
+    val title :String,
+    val price : Double,
+    val quantity : Int,
+    val total : Double,
+    val discountPercentage :Double,
+    val discountedTotal : Double,
+    val thumbnail :String,
+)

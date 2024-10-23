@@ -1,5 +1,7 @@
 package com.example.shopease.feature_common.components
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
@@ -14,7 +16,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun StarRating(rating:Double) {
     val maxStars :Int = 5
-    CommonRow {
+    CommonRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
         for(star in 1..maxStars.toInt()) {
 
 

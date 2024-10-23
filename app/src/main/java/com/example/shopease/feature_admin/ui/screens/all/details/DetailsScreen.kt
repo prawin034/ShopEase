@@ -1,6 +1,8 @@
 package com.example.shopease.feature_admin.ui.screens.all.details
 
 import android.os.Build
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -27,15 +29,14 @@ import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,15 +45,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.example.shopease.feature_admin.data.model.AddToCarProduct
+import com.example.shopease.feature_admin.data.model.AddToCartRequest
 import com.example.shopease.feature_admin.data.model.Product
 import com.example.shopease.feature_admin.data.model.Review
+import com.example.shopease.feature_admin.navigation.Screen
+import com.example.shopease.feature_admin.ui.viewModel.CommonViewModel
+import com.example.shopease.feature_admin.ui.viewModel.cart.CartViewModel
 import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
 import com.example.shopease.feature_common.components.AppCard
 import com.example.shopease.feature_common.components.AppScaffold
@@ -87,12 +95,20 @@ import kotlinx.coroutines.launch
 fun DetailsScreen(
     navController: NavHostController,
     homeScreenViewModel: HomeScreenViewModel,
-    id: Int?
+    id: Int?,
+    cartViewModel: CartViewModel,
+    commonViewModel: CommonViewModel
 ) {
-    
-    
+
+
+    BackHandler {
+        navController.popBackStack()
+        cartViewModel.clearCounter()
+    }
+    val context = LocalContext.current
     val product by homeScreenViewModel.getSingleProduct.observeAsState(initial = emptyList())
-    
+    val sucessMessage by cartViewModel.successMessage.observeAsState()
+    val failureMessage by cartViewModel.failureMessage.observeAsState()
     LaunchedEffect(Unit){
 
         if(id !=null){
@@ -124,7 +140,7 @@ fun DetailsScreen(
         },
         bottomAppBar = {
 
-                AddToCartBottomBar()
+                AddToCartBottomBar(navController,cartViewModel,product,commonViewModel)
 
 
 
@@ -134,12 +150,19 @@ fun DetailsScreen(
         
         
         if(product?.isNotEmpty() == true) {
-        DetailProduct(navController,homeScreenViewModel, product!!,it)
+        DetailProduct(navController,homeScreenViewModel, product!!,it,cartViewModel)
         }
 
 
 
-        
+        if(sucessMessage !=null) {
+            Toast.makeText(context,"$sucessMessage",Toast.LENGTH_SHORT).show()
+        cartViewModel.clearToast()
+        }
+        if(failureMessage !=null) {
+            Toast.makeText(context,"$failureMessage",Toast.LENGTH_SHORT).show()
+        cartViewModel.clearToast()
+        }
     }
     
 }
@@ -154,7 +177,8 @@ fun DetailProduct(
     navController: NavHostController,
     homeScreenViewModel: HomeScreenViewModel,
     product: List<Product>,
-    it:PaddingValues
+    it: PaddingValues,
+    cartViewModel: CartViewModel
 ) {
 
     val scope = rememberCoroutineScope()
@@ -357,17 +381,9 @@ fun ReviewsProduct(item: Product, reviews: List<Review>) {
             SpacerCommon()
 
             StarRating(rating = item.rating)
-
-
             SpacerCommon()
             //Review
 
-            
-            
-            
-            
-            
-            
         }
 
         Reviews(item.reviews)
@@ -392,10 +408,10 @@ fun Reviews(reviews: List<Review>) {
         ) {
 
             CommonRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-               CommonRow {
+               CommonRow(modifier = Modifier) {
                    Avatar(name = item.reviewerName)
                    Column(modifier = Modifier.padding(horizontal = 4.dp),verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.Start) {
-                       AppTxt(text = item.reviewerName,)
+                       AppTxt(text = item.reviewerName, textColor = Color.Black)
                    }
                }
 
@@ -545,27 +561,41 @@ fun ProductInformation(item: Product) {
 
 
 @Composable
-fun AddToCartBottomBar() {
+fun AddToCartBottomBar(navController: NavController,cartViewModel: CartViewModel, product: List<Product>?,commonViewModel: CommonViewModel) {
+    val context = LocalContext.current
 
+    val counter  =cartViewModel.counter.value
     CommonRow(
-        modifier = Modifier.background(color = Color(ShopAppConstants.cardLightColor)).fillMaxWidth().navigationBarsPadding(),
+        modifier = Modifier
+            .background(color = Color(ShopAppConstants.cardLightColor))
+            .fillMaxWidth()
+            .navigationBarsPadding(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceAround,
         enableDefaultPadding = true
     ) {
 
-        Row(modifier = Modifier.fillMaxWidth(0.4f), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+        Row(modifier = Modifier.fillMaxWidth(0.4f), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically)
+        {
            MinusButton {
-
+               cartViewModel.decrementCounter()
            }
 
-            Text(text = "1", color = Color.Black, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+
+            Text(text = counter.toString(), color = Color.Black, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
 
 
-           PlusButton {
+            PlusButton {
+                product?.let {
+                    if (counter < it[0].stock && counter < it[0].minimumOrderQuantity) {
+                        cartViewModel.incrementCounter()
 
-           }
+                    }
+                }
+            }
         }
+
+
 
         Row(modifier = Modifier.fillMaxWidth(0.6f)) {
 
@@ -577,11 +607,33 @@ fun AddToCartBottomBar() {
             )
             {
 
+                product?.let {
+                    cartViewModel.addToCart(
+                        payload = AddToCartRequest(
+                            userId = 3,
+                            products = listOf(
+                                AddToCarProduct(
+                                    id = it[0].id,
+                                    quantity = counter
+                                )
+                            )
+                        )
+                    )
+                    {sucess ->
+                        navController.navigate(Screen.AdminScreen.route)
+                        commonViewModel.changeActiveTab(1)
+
+                    }
+                }
+
+
             }
         }
 
 
+
     }
+
 
 
 
@@ -622,6 +674,5 @@ fun Avatar(
 
 
 }
-
 
 

@@ -18,7 +18,7 @@ fun CommonRow(
     modifier: Modifier = Modifier.fillMaxWidth(),
     enableDefaultPadding : Boolean = false,
     paddingValues: PaddingValues = PaddingValues(0.dp),
-    horizontalArrangement: Arrangement.Horizontal = Arrangement.Center,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.SpaceBetween,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     content: @Composable () -> Unit
 ){

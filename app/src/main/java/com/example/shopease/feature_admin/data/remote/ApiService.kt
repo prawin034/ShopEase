@@ -1,5 +1,7 @@
 package com.example.shopease.feature_admin.data.remote
 
+import com.example.shopease.feature_admin.data.model.AddToCartRequest
+import com.example.shopease.feature_admin.data.model.AddToCartResponse
 import com.example.shopease.feature_admin.data.model.AllProductCategory
 import com.example.shopease.feature_admin.data.model.Product
 import com.example.shopease.feature_admin.data.model.ProductCategory
@@ -38,5 +40,10 @@ interface ApiService {
     suspend fun getProductBasedOnCategory(@Path("category") category :String) : Response<ProductCategory>
     @GET("/products/{id}")
     suspend fun getSingleProduct(@Path("id") id:Int) : Response<Product>
+
+
+
+    @POST("/carts/add")
+    suspend fun addToCart(@Body payload : AddToCartRequest) : Response<AddToCartResponse>
 
 }

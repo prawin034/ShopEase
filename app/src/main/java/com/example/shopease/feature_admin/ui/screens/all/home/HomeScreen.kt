@@ -25,7 +25,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -71,8 +73,33 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
     val productBasedOnGrocery by  homeScreenViewModel.getProductBasedOnGroceriesCategory.observeAsState(initial = emptyList())
     val productBasedOnWomenDress by  homeScreenViewModel.getProductBasedOnWomens_dressesCategory.observeAsState(initial = emptyList())
 
+    val isDataLoaed = rememberSaveable {
+        mutableStateOf(false)
+    }
 
 //
+
+
+    LaunchedEffect(Unit) {
+        if(!isDataLoaed.value &&
+            getAllProductCategory?.isEmpty() == true &&
+            productBasedOnHotSales?.isEmpty() == true &&
+            productBasedOnBeauty?.isEmpty() == true &&
+            productBasedOnFurniture?.isEmpty() == true &&
+            productBasedOnGrocery?.isEmpty() == true &&
+            productBasedOnWomenDress?.isEmpty() == true
+            )
+        {
+            homeScreenViewModel.getAllProductsCategory()
+            homeScreenViewModel.getProductBasedOnCategory("laptops")
+            homeScreenViewModel.getProductBasedOnBeautyCategory("beauty")
+            homeScreenViewModel.getProductBasedOnFurnitureCategory("furniture")
+            homeScreenViewModel.getProductBasedOnGroceryCategory("groceries")
+            homeScreenViewModel.getProductBasedOnWomenDressCategory("womens-dresses")
+            isDataLoaed.value = true
+        }
+
+    }
 
 
     AppScaffold(

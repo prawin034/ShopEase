@@ -58,23 +58,8 @@ class HomeScreenViewModel(
 
 
 
-    init {
-        getAllProductsCategory()
-        getProductBasedOnCategory("laptops")
-        getProductBasedOnBeautyCategory("beauty")
-        getProductBasedOnFurnitureCategory("furniture")
-        getProductBasedOnGroceryCategory("groceries")
-        getProductBasedOnWomenDressCategory("womens-dresses")
 
-
-    }
-
-
-
-
-
-
-    private fun getAllProductsCategory()  {
+     fun getAllProductsCategory()  {
         _successMessage.value = null
         _failureMessage.value = null
         viewModelScope.launch {

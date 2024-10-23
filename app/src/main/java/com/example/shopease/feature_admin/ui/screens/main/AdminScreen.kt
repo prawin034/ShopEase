@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -20,6 +21,7 @@ import com.example.shopease.feature_admin.ui.screens.all.home.HomeScreen
 import com.example.shopease.feature_admin.ui.screens.all.profile.ProfileScreen
 import com.example.shopease.feature_admin.ui.screens.all.search.SearchScreen
 import com.example.shopease.feature_admin.ui.viewModel.CommonViewModel
+import com.example.shopease.feature_admin.ui.viewModel.cart.CartViewModel
 import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
 import com.example.shopease.feature_common.components.AppScaffold
 import com.example.shopease.feature_common.components.CustomBottomBar
@@ -39,6 +41,7 @@ fun AdminScreen(
     commonViewModel: CommonViewModel,
     homeScreenViewModel: HomeScreenViewModel,
     loginViewModel: LoginViewModel,
+    cartViewModel: CartViewModel
 ) {
 
     val bottomList = listOf<String>("Home","Cart","Search","Profile")
@@ -76,7 +79,7 @@ fun AdminScreen(
 
             when(activeTab) {
                 0 -> HomeScreen(navController,homeScreenViewModel)
-                1 -> CartScreen()
+                1 -> CartScreen(navController,cartViewModel)
                 2 -> SearchScreen(navController,homeScreenViewModel)
                 3 -> ProfileScreen(navController,loginViewModel)
             }

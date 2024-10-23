@@ -248,6 +248,7 @@ fun AppTxt(
     fontFamily: FontFamily = FontFamily.SansSerif,
     textAlign: TextAlign = TextAlign.Start,
     letterSpacing: TextUnit = 2.sp,
+    maxLines :Int = 1,
     modifier: Modifier = Modifier
 ){
 
@@ -257,7 +258,7 @@ fun AppTxt(
         fontWeight = fontWeight,
         fontFamily = fontFamily,
         letterSpacing = letterSpacing,
-        maxLines = 1,
+        maxLines = maxLines,
         color = textColor,
         textAlign = textAlign,
         modifier = modifier

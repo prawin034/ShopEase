@@ -15,3 +15,20 @@ fun getToken(context: Context) :String?{
     return  sharedPreferences.getString("ACCESS_TOKEN","token")
 }
 
+
+
+
+fun saveTheme(context: Context,type: Boolean) {
+    val sharedPrefs = context.getSharedPreferences("My_Prefs",Context.MODE_PRIVATE)
+    val editor = sharedPrefs.edit()
+    editor.putBoolean("APP_THEME",type)
+    editor.apply()
+}
+
+
+
+fun getTheme(context: Context) : Boolean {
+
+    val sharedPrefs = context.getSharedPreferences("My_Prefs",Context.MODE_PRIVATE)
+    return  sharedPrefs.getBoolean("APP_THEME",false)
+}

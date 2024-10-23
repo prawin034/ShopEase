@@ -17,10 +17,18 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.shopease.feature_admin.ui.viewModel.CommonViewModel
+import com.example.shopease.feature_login.dataStore.getTheme
 
 /*  This App Scaffold works as a reusable component layout throughout the application.
 *
@@ -36,11 +44,16 @@ fun AppScaffold(
     floatingButton : @Composable () -> Unit,
     floatingPosition : FabPosition =  FabPosition.Center,
     contentColor : Color = Color.White,
-    containerColor: Color = Color.White,
+    containerColor: Color =  Color.White,
     content : @Composable (PaddingValues) -> Unit
 
 ){
-
+    val context = LocalContext.current
+    val commonViewModel :CommonViewModel = viewModel()
+    val theme by commonViewModel.isDarkTheme.observeAsState(initial = getTheme(context))
+   
+    val containerColorUpdate =  if(theme) Color.Black else containerColor
+    val contentColorUpdate  =  if(theme) Color.White else  contentColor
     Scaffold(
         topBar = {
                  topAppBar()
@@ -52,12 +65,14 @@ fun AppScaffold(
                  floatingButton()
         },
         floatingActionButtonPosition = floatingPosition,
-        contentColor = contentColor,
-        containerColor = containerColor,
+        contentColor = contentColorUpdate,
+        containerColor = containerColorUpdate,
         content = {
             Surface(
-                modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets(0.dp)),
-                color = Color.White
+                modifier = Modifier
+                    .fillMaxSize()
+                    .windowInsetsPadding(WindowInsets(0.dp)),
+                color = containerColorUpdate
             ) {
                 content(it)
 

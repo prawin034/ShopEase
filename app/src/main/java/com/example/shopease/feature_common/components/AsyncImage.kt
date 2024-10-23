@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 
@@ -17,7 +18,7 @@ import coil.compose.rememberAsyncImagePainter
 @Composable
 fun AsyncImageComponent(
     imageUrl: String,
-
+    contentScale: ContentScale = ContentScale.FillHeight,
     color: Color = Color.LightGray,
     badgeAvailable : Boolean = false,
     badgeName :String = "",
@@ -32,6 +33,7 @@ fun AsyncImageComponent(
         Image(
 
             painter = painter,
+            contentScale = contentScale,
             contentDescription = "image",
             modifier = modifier
                 .background(color = color, shape )

@@ -18,6 +18,7 @@ import androidx.navigation.navArgument
 import com.example.shopease.feature_admin.ui.screens.all.details.DetailsScreen
 import com.example.shopease.feature_admin.ui.screens.main.AdminScreen
 import com.example.shopease.feature_admin.ui.viewModel.CommonViewModel
+import com.example.shopease.feature_admin.ui.viewModel.cart.CartViewModel
 import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
 import com.example.shopease.feature_login.ui.screens.landingScreeen.LandingScreen
 import com.example.shopease.feature_login.ui.screens.loginScreen.LoginScreen
@@ -35,20 +36,21 @@ fun App(
     commonViewModel: CommonViewModel,
     homeScreenViewModel: HomeScreenViewModel,
     loginViewModel: LoginViewModel,
-    registrationViewModel: RegistrationViewModel
+    registrationViewModel: RegistrationViewModel,
+    cartViewModel: CartViewModel
 ) {
 
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
-        startDestination = Screen.LoginScreen.route
+        startDestination = Screen.AdminScreen.route
     ) {
 
         composable(
             route = Screen.AdminScreen.route,
         ) {
-            AdminScreen(navController,commonViewModel,homeScreenViewModel,loginViewModel )
+            AdminScreen(navController,commonViewModel,homeScreenViewModel,loginViewModel ,cartViewModel)
         }
 
         composable(
@@ -78,7 +80,7 @@ fun App(
             }
         ){backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id")
-            DetailsScreen(navController,homeScreenViewModel,id)
+            DetailsScreen(navController,homeScreenViewModel,id,cartViewModel,commonViewModel)
         }
 
 
