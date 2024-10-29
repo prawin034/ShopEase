@@ -11,5 +11,14 @@ data class AddToCartRequest(
 
 data  class AddToCarProduct(
    val id :Int,
-   val quantity :Int
+   val quantity :Int,
+   val stock :Int,
+   val minimumOrderQuantity : Int
+)
+
+
+
+data class UpdateCartRequest(
+   val merge :Boolean = true,
+   val products: List<AddToCarProduct>
 )

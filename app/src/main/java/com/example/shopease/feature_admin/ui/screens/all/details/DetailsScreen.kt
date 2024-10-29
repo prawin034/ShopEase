@@ -1,6 +1,7 @@
 package com.example.shopease.feature_admin.ui.screens.all.details
 
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
@@ -157,7 +158,7 @@ fun DetailsScreen(
 
         if(sucessMessage !=null) {
             Toast.makeText(context,"$sucessMessage",Toast.LENGTH_SHORT).show()
-        cartViewModel.clearToast()
+           cartViewModel.clearToast()
         }
         if(failureMessage !=null) {
             Toast.makeText(context,"$failureMessage",Toast.LENGTH_SHORT).show()
@@ -565,6 +566,8 @@ fun AddToCartBottomBar(navController: NavController,cartViewModel: CartViewModel
     val context = LocalContext.current
 
     val counter  =cartViewModel.counter.value
+    val cartList  by remember { mutableStateOf(commonViewModel.addToCartItems) }
+    val alert by commonViewModel.confirmationAlert.observeAsState()
     CommonRow(
         modifier = Modifier
             .background(color = Color(ShopAppConstants.cardLightColor))
@@ -607,21 +610,27 @@ fun AddToCartBottomBar(navController: NavController,cartViewModel: CartViewModel
             )
             {
 
+
+
                 product?.let {
+                    commonViewModel.updateConfirmationAlert(true)
+                    commonViewModel.addItem(AddToCarProduct(id = it[0].id, quantity = counter, stock = it[0].stock, minimumOrderQuantity = it[0].minimumOrderQuantity))
+
+//
+
+
+
                     cartViewModel.addToCart(
                         payload = AddToCartRequest(
-                            userId = 3,
-                            products = listOf(
-                                AddToCarProduct(
-                                    id = it[0].id,
-                                    quantity = counter
-                                )
-                            )
+                            userId = 51,
+                            products = cartList.toList()
                         )
                     )
                     {sucess ->
                         navController.navigate(Screen.AdminScreen.route)
-                        commonViewModel.changeActiveTab(1)
+                        commonViewModel.changeActiveTab(3)
+                        cartViewModel.clearCounter()
+                        Log.d("CartList","$cartList")
 
                     }
                 }
@@ -674,5 +683,3 @@ fun Avatar(
 
 
 }
-
-

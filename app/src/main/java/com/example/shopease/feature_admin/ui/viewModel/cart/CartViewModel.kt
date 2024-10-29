@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.shopease.feature_admin.data.model.AddToCartRequest
 import com.example.shopease.feature_admin.data.model.AddToCartResponse
+import com.example.shopease.feature_admin.data.model.UpdateCartRequest
 import com.example.shopease.feature_admin.data.remote.ApiRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -73,7 +74,47 @@ class CartViewModel(private val repository: ApiRepository) :ViewModel() {
                 _failureMessage.value = "Failed to add to cart: ${result.exceptionOrNull()?.message}"
                 callBack(false)  // Notify caller that operation failed
             }
+        }
+    }
+    fun deleteCart(id: Int) {
+        _successMessage.value = null
+        _failureMessage.value = null
+        viewModelScope.launch(Dispatchers.Main) {
+            val result = withContext(Dispatchers.IO) {
+                repository.deleteCart(id)
+            }
+            if (result.isSuccess) {
+                val response = result.getOrNull()
+                response?.let {
+                    _cartList.postValue(listOf(it))
+                    _successMessage.value = "SuccessFully Added to Cart"
 
+
+                }
+            } else {
+                _failureMessage.value =
+                    "Failed to add to cart: ${result.exceptionOrNull()?.message}"
+
+            }
+        }
+    }
+
+    fun updateCart(id:Int , payload:UpdateCartRequest,callBack: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val result = repository.updateCartRequest(id,payload)
+            if(result.isSuccess) {
+                val response = result.getOrNull()
+                response?.let {
+                    _cartList.postValue(listOf(it))
+                    _successMessage.value = "SuccessFully Updated cart!"
+                    callBack(true)
+                }
+            }
+            else {
+                val exception = result.exceptionOrNull()
+                _failureMessage.value = "Failed to add to cart: ${exception?.message}"
+                callBack(false)
+            }
         }
     }
 

@@ -330,6 +330,7 @@ fun iconBtn(
     enabled: Boolean = true,
     colors: IconButtonColors ,
     modifier: Modifier = Modifier,
+    iconModifier : Modifier = Modifier,
     onClick: () -> Unit,
 ){
 
@@ -342,7 +343,7 @@ fun iconBtn(
         }
     )
     {
-      Icon(imageVector = icon, contentDescription = "", tint = iconColor )
+      Icon(imageVector = icon, contentDescription = "", tint = iconColor , modifier = iconModifier)
     }
 
 }

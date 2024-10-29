@@ -7,6 +7,7 @@ import com.example.shopease.feature_admin.data.model.AddToCartResponse
 import com.example.shopease.feature_admin.data.model.AllProductCategory
 import com.example.shopease.feature_admin.data.model.Product
 import com.example.shopease.feature_admin.data.model.ProductCategory
+import com.example.shopease.feature_admin.data.model.UpdateCartRequest
 import com.example.shopease.feature_login.model.RegisterRequest
 import com.example.shopease.feature_login.model.loginRequest
 import com.example.shopease.feature_login.model.loginResponse
@@ -141,6 +142,43 @@ class ApiRepository(private val context: Context) {
         }
     }
 
+    suspend fun deleteCart(id: Int) :Result<AddToCartResponse> {
+
+        return try {
+            val response = apiService.deleteCart(id)
+            if (response.isSuccessful) {
+                val responseBody = response.body()
+                if (responseBody != null) Result.success(responseBody) else Result.failure(
+                    Exception(
+                        "Response body is null"
+                    )
+                )
+            } else {
+                Result.failure(Exception("Response is failed with code ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(Exception(" Request Failed : ${e.message}"))
+        }
+    }
+
+    suspend fun updateCartRequest(id: Int,payload:UpdateCartRequest) :Result<AddToCartResponse> {
+
+        return try {
+            val response = apiService.updateCart(id,payload)
+            if (response.isSuccessful) {
+                val responseBody = response.body()
+                if (responseBody != null) Result.success(responseBody) else Result.failure(
+                    Exception(
+                        "Response body is null"
+                    )
+                )
+            } else {
+                Result.failure(Exception("Response is failed with code ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(Exception(" Request Failed : ${e.message}"))
+        }
+    }
 
 
 

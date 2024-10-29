@@ -88,7 +88,7 @@ data class CartResponseList(
     val id : Int,
     val title :String,
     val price : Double,
-    val quantity : Int,
+    var quantity : Int,
     val total : Double,
     val discountPercentage :Double,
     val discountedTotal : Double,

@@ -44,7 +44,7 @@ fun AdminScreen(
     cartViewModel: CartViewModel
 ) {
 
-    val bottomList = listOf<String>("Home","Cart","Search","Profile")
+    val bottomList = listOf<String>("Home","Search","Profile","Cart")
     val activeTab by commonViewModel.activeTabIndex.observeAsState()
     AppScaffold(
         topAppBar = {},
@@ -79,9 +79,9 @@ fun AdminScreen(
 
             when(activeTab) {
                 0 -> HomeScreen(navController,homeScreenViewModel)
-                1 -> CartScreen(navController,cartViewModel)
-                2 -> SearchScreen(navController,homeScreenViewModel)
-                3 -> ProfileScreen(navController,loginViewModel)
+                1 -> SearchScreen(navController,homeScreenViewModel)
+                2 -> ProfileScreen(navController,loginViewModel)
+                3 -> CartScreen(navController , cartViewModel,commonViewModel)
             }
 
 
