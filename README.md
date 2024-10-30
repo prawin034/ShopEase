@@ -1,7 +1,7 @@
 ShopEase -> E-commerce App
 
-        ShopEase is a comprehensive e-commerce application built using the MVVM architecture and modern Android development practices. This app combines a smooth, intuitive UI with powerful backend integration to 
-       provide users with a seamless shopping experience.
+ ShopEase is a comprehensive e-commerce application built using the MVVM architecture and modern Android development practices. This app combines a smooth, intuitive UI with powerful backend integration to 
+ provide users with a seamless shopping experience.
 
 Features
 
