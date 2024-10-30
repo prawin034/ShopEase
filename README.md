@@ -45,9 +45,7 @@ Copy code :
 
 Navigate to the Project Directory: Move into the cloned repository's directory:
 
-Copy code
 
-        cd ShopEase
 
 
 LOGIN : 
