@@ -50,6 +50,7 @@ cd ShopEase
 
 LOGIN : 
       userName -> emilys
+      
       password -> emilyspass
 
 Open the Project in Android Studio: Launch Android Studio, select "Open," and navigate to the ShopEase directory. Allow Android Studio to sync the project and install any necessary dependencies.
