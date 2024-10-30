@@ -27,3 +27,24 @@ Architecture: MVVM (Model-View-ViewModel)
 Networking: Retrofit and OkHttp, with interceptors for handling authentication tokens and headers
 
 Local Storage: SharedPreferences for saving user settings
+
+
+
+
+Getting Started
+
+To get started with ShopEase, follow these steps:
+
+Clone the Repository: Open your terminal and use the following command to clone the ShopEase repository:
+
+Copy code
+
+git clone https://github.com/prawin034/ShopEase.git
+
+Navigate to the Project Directory: Move into the cloned repository's directory:
+
+Copy code
+
+cd ShopEase
+
+Open the Project in Android Studio: Launch Android Studio, select "Open," and navigate to the ShopEase directory. Allow Android Studio to sync the project and install any necessary dependencies.
