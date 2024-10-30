@@ -18,38 +18,39 @@ Elegant UI:           Built with Jetpack Compose for a modern, responsive, and v
 
 Tech Stack
 
-Language: Kotlin
+      Language: Kotlin
 
-UI Framework: Jetpack Compose
+      UI Framework: Jetpack Compose
 
-Architecture: MVVM (Model-View-ViewModel)
+     Architecture: MVVM (Model-View-ViewModel)
 
-Networking: Retrofit and OkHttp, with interceptors for handling authentication tokens and headers
+     Networking: Retrofit and OkHttp, with interceptors for handling authentication tokens and headers
 
-Local Storage: SharedPreferences for saving user settings
+    Local Storage: SharedPreferences for saving user settings
 
 
 
 
 Getting Started
 
-To get started with ShopEase, follow these steps:
+To get started with ShopEase, follow these steps :
 
 Clone the Repository: Open your terminal and use the following command to clone the ShopEase repository:
 
-Copy code
+Copy code :
 
-git clone https://github.com/prawin034/ShopEase.git
+        git clone https://github.com/prawin034/ShopEase.git
 
 Navigate to the Project Directory: Move into the cloned repository's directory:
 
 Copy code
 
-cd ShopEase
+        cd ShopEase
 
 
 LOGIN : 
-      userName -> emilys
+
+      UserName -> emilys,
       
       password -> emilyspass
 
