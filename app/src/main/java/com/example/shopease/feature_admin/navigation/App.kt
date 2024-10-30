@@ -44,7 +44,7 @@ fun App(
 
     NavHost(
         navController = navController,
-        startDestination = Screen.LandingScreen.route
+        startDestination = Screen.AdminScreen.route
     ) {
 
         composable(

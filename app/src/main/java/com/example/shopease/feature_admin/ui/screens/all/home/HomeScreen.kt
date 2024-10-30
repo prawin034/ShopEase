@@ -2,6 +2,7 @@ package com.example.shopease.feature_admin.ui.screens.all.home
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -40,18 +44,19 @@ import com.example.shopease.feature_admin.data.model.Product
 import com.example.shopease.feature_admin.navigation.Screen
 import com.example.shopease.feature_admin.ui.screens.all.details.Avatar
 import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
-import com.example.shopease.feature_common.components.AppMenuBtn
+import com.example.shopease.feature_common.animations.MarqueTab
 import com.example.shopease.feature_common.components.AppScaffold
 import com.example.shopease.feature_common.components.AsyncImageComponent
 import com.example.shopease.feature_common.components.CommonRow
 import com.example.shopease.feature_common.components.CustomTopAppBar
 import com.example.shopease.feature_common.components.DescriptionText
-import com.example.shopease.feature_common.components.FilterBtn
 import com.example.shopease.feature_common.components.HeaderText
 import com.example.shopease.feature_common.components.PriceText
 import com.example.shopease.feature_common.components.ProductCategoryCard
 import com.example.shopease.feature_common.components.SectionTitleTxt
 import com.example.shopease.feature_common.components.SeeAllText
+import com.example.shopease.feature_common.components.ShopEasePager
+import com.example.shopease.feature_common.components.SpacerCommon
 import com.example.shopease.feature_common.utils.ShopAppConstants
 import com.example.shopease.feature_common.utils.generateRandomColor
 import kotlinx.coroutines.Dispatchers
@@ -78,7 +83,6 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
     }
 
 //
-
 
     LaunchedEffect(Unit) {
         if(!isDataLoaed.value &&
@@ -136,29 +140,41 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
                 .verticalScroll(
                     rememberScrollState()
                 )
-                .padding(top = 5.dp),
+                .padding(top = 1.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
 
-            // -> 1. First Row contains filter method and all category product cards
+
+            // 1 -> 
+            MarqueTab(list = listOf("FASTEST DELIVERY","100% GENUINE PRODUCTS", "PREMIMUM FINDS"))
+
+            if(productBasedOnHotSales?.isNotEmpty() == true) {
+                ShopEasePager(productBasedOnHotSales!![0].products,navController)
+            }
+
+
+            // -> 3. First Row contains filter method and all category product cards
+
+
 
             Row(
                 modifier = Modifier
+                    .background(color = Color(ShopAppConstants.cardLightColor))
                     .fillMaxWidth()
-                    .padding(4.dp),
+                    .padding(10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                Row {
-                    FilterBtn {
 
-                    }
-                }
-
-
-                LazyRow(contentPadding = PaddingValues(horizontal = 10.dp)) {
+                LazyHorizontalGrid(rows = GridCells.Fixed(2),
+                    modifier = Modifier.height(150.dp) ,
+                    contentPadding = PaddingValues(horizontal = 0.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp), // Horizontal space between items
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                )
+                {
                     itemsIndexed(getAllProductCategory ?: emptyList()){ _: Int, item: AllProductCategory ->
 
                         ProductCategoryCard(productCategory = item)

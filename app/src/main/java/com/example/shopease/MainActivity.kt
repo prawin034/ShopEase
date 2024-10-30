@@ -60,7 +60,6 @@ class MainActivity : ComponentActivity() {
         cartViewModel = ViewModelProvider(this,cartFactory)[CartViewModel::class.java]
        WindowCompat.setDecorFitsSystemWindows(window,false)
       // enableEdgeToEdge()
-
         setContent {
             var isDarkThemes by remember { mutableStateOf(getTheme(applicationContext)) }
             val theme by commonViewModel.isDarkTheme.observeAsState(isDarkThemes)
@@ -83,15 +82,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//
-//    val commonViewModel :CommonViewModel = viewModel()
-//    ShopEaseTheme {
-//        App(commonViewModel)
-//    }
-//}

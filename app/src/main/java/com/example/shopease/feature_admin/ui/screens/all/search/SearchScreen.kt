@@ -10,6 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
+import com.example.shopease.feature_admin.navigation.Screen
+import com.example.shopease.feature_admin.ui.viewModel.CommonViewModel
 import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
 import com.example.shopease.feature_common.components.AppScaffold
 import com.example.shopease.feature_common.components.BackIconButton
@@ -21,8 +23,7 @@ import com.example.shopease.feature_common.utils.ShopAppConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(navController: NavHostController, homeScreenViewModel: HomeScreenViewModel) {
-
+fun SearchScreen(navController: NavHostController, homeScreenViewModel: HomeScreenViewModel,commonViewModel: CommonViewModel) {
 
 
     AppScaffold(
@@ -30,9 +31,9 @@ fun SearchScreen(navController: NavHostController, homeScreenViewModel: HomeScre
                 CustomTopAppBar(
                     navigationIcon = {
                           BackIconButton(
-                              color = Color.White
+                              color = Color.Black
                           ) {
-                              navController.popBackStack()
+                            commonViewModel.changeActiveTab(0)
                           }
                     },
                     titleContent = {

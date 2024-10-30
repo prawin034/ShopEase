@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
@@ -20,6 +21,7 @@ fun AsyncImageComponent(
     imageUrl: String,
     contentScale: ContentScale = ContentScale.FillHeight,
     color: Color = Color.LightGray,
+    contentAlignment: Alignment = Alignment.TopStart,
     badgeAvailable : Boolean = false,
     badgeName :String = "",
     shape: RoundedCornerShape = RoundedCornerShape(12.dp),
@@ -28,7 +30,7 @@ fun AsyncImageComponent(
 ) {
     val painter = rememberAsyncImagePainter(imageUrl, filterQuality = FilterQuality.Low)
     val painterState = painter.state
-    Box() {
+    Box(contentAlignment = contentAlignment) {
 
         Image(
 
