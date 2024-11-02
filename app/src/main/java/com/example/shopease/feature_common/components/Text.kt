@@ -190,7 +190,7 @@ fun PriceText(
     title: String,
     fontSize: Int = 10,
     color: Color = Color(ShopAppConstants.AppSecondaryTextColor),
-    onClick : () -> Unit
+
 ){
     Text(
         text = title,
@@ -199,9 +199,7 @@ fun PriceText(
         fontFamily = FontFamily.Monospace,
         letterSpacing = 2.sp,
         color = color,
-        modifier = Modifier.clickable {
-            onClick.invoke()
-        }
+
     )
 }
 

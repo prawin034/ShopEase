@@ -41,6 +41,12 @@ data class Product(
     val thumbnail: String
 )
 
+
+
+data class SearchProducts(
+    val products: List<Product>
+)
+
 data class Dimensions(
     val width: Double,
     val height: Double,

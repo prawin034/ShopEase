@@ -226,9 +226,7 @@ fun CartItems(product:AddToCartResponse,cartViewModel: CartViewModel,commonViewM
                                 ShopAppConstants.AppPrimaryColor
                             )
                         )
-                        {
 
-                        }
                     }
 
 

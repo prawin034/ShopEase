@@ -56,7 +56,6 @@ import com.example.shopease.feature_common.components.ProductCategoryCard
 import com.example.shopease.feature_common.components.SectionTitleTxt
 import com.example.shopease.feature_common.components.SeeAllText
 import com.example.shopease.feature_common.components.ShopEasePager
-import com.example.shopease.feature_common.components.SpacerCommon
 import com.example.shopease.feature_common.utils.ShopAppConstants
 import com.example.shopease.feature_common.utils.generateRandomColor
 import kotlinx.coroutines.Dispatchers
@@ -126,7 +125,6 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
                         },
                         titleContent = { /*TODO*/ }
                     ) {
-
                     }
         },
         bottomAppBar = { /*TODO*/ },
@@ -355,8 +353,7 @@ fun CommonCategory(productBasedOnCategory: List<Product>,navController: NavContr
                     HeaderText(title = item.title, modifier = Modifier
                         .width(150.dp)
                         .padding(bottom = 3.dp, top = 5.dp))
-                    PriceText(title = item.price.toString()) {
-                    }
+                    PriceText(title = item.price.toString())
                 }
 
                 DescriptionText(title = item.description, modifier = Modifier.width(200.dp))

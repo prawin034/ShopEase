@@ -35,10 +35,6 @@ object RetrofitClient {
 //     val retrofitInstance : ApiService by lazy {
 //        createRetrofitClient()
 //    }
-
-
-
-
     fun createRetrofitClient(context: Context) : ApiService {
 
         val retrofit = Retrofit.Builder()
@@ -46,7 +42,6 @@ object RetrofitClient {
             .addConverterFactory(GsonConverterFactory.create())
             .client(okhttpClient(context))
             .build()
-
         return  retrofit.create(ApiService::class.java)
     }
 }

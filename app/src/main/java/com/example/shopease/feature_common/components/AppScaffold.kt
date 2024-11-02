@@ -45,6 +45,7 @@ fun AppScaffold(
     floatingPosition : FabPosition =  FabPosition.Center,
     contentColor : Color = Color.White,
     containerColor: Color =  Color.White,
+    modifier: Modifier = Modifier,
     content : @Composable (PaddingValues) -> Unit
 
 ){
@@ -55,6 +56,7 @@ fun AppScaffold(
     val containerColorUpdate =  if(theme) Color.Black else containerColor
     val contentColorUpdate  =  if(theme) Color.White else  contentColor
     Scaffold(
+        modifier = modifier ,
         topBar = {
                  topAppBar()
         },

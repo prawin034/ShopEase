@@ -7,6 +7,7 @@ import com.example.shopease.feature_admin.data.model.AddToCartResponse
 import com.example.shopease.feature_admin.data.model.AllProductCategory
 import com.example.shopease.feature_admin.data.model.Product
 import com.example.shopease.feature_admin.data.model.ProductCategory
+import com.example.shopease.feature_admin.data.model.SearchProducts
 import com.example.shopease.feature_admin.data.model.UpdateCartRequest
 import com.example.shopease.feature_login.model.RegisterRequest
 import com.example.shopease.feature_login.model.loginRequest
@@ -177,6 +178,28 @@ class ApiRepository(private val context: Context) {
             }
         } catch (e: Exception) {
             Result.failure(Exception(" Request Failed : ${e.message}"))
+        }
+    }
+
+
+
+    suspend fun searchProducts(query:String,sortBy:String,order:String) : Result<SearchProducts> {
+        return  try {
+            val response = apiService.searchProducts(query,sortBy,order)
+            if(response.isSuccessful) {
+                val responseBody = response.body()
+                if(responseBody !=null) {
+                    Result.success(responseBody)
+                }
+                else {
+                    Result.failure(Exception("Response body is null"))
+                }
+            }
+            else {
+                Result.failure(Exception("Response is failed with code ${response.code()}"))
+            }
+        }catch (e:Exception){
+            Result.failure(Exception("Request failed : ${e.message}"))
         }
     }
 

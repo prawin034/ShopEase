@@ -20,6 +20,7 @@ import com.example.shopease.feature_admin.ui.screens.main.AdminScreen
 import com.example.shopease.feature_admin.ui.viewModel.CommonViewModel
 import com.example.shopease.feature_admin.ui.viewModel.cart.CartViewModel
 import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
+import com.example.shopease.feature_admin.ui.viewModel.seach.SearchViewModel
 import com.example.shopease.feature_login.ui.screens.landingScreeen.LandingScreen
 import com.example.shopease.feature_login.ui.screens.loginScreen.LoginScreen
 import com.example.shopease.feature_login.ui.screens.resgistrationScreen.RegistrationScreen
@@ -37,7 +38,8 @@ fun App(
     homeScreenViewModel: HomeScreenViewModel,
     loginViewModel: LoginViewModel,
     registrationViewModel: RegistrationViewModel,
-    cartViewModel: CartViewModel
+    cartViewModel: CartViewModel,
+    searchViewModel: SearchViewModel
 ) {
 
     val navController = rememberNavController()
@@ -50,7 +52,7 @@ fun App(
         composable(
             route = Screen.AdminScreen.route,
         ) {
-            AdminScreen(navController,commonViewModel,homeScreenViewModel,loginViewModel ,cartViewModel)
+            AdminScreen(navController,commonViewModel,homeScreenViewModel,loginViewModel ,cartViewModel,searchViewModel)
         }
 
         composable(

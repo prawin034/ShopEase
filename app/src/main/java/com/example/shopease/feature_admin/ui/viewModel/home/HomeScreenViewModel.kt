@@ -58,6 +58,36 @@ class HomeScreenViewModel(
 
 
 
+    /* Search Paramters
+
+
+     */
+    private val _querySearch = MutableLiveData<String>()
+    val querySearch : LiveData<String> get() = _querySearch
+    fun updateQuerySearch(value:String){
+        _querySearch.value = value
+    }
+
+    private val _activeSearch = MutableLiveData<Boolean>(false)
+    val activeSearch  : LiveData<Boolean> get() = _activeSearch
+
+
+    fun updateActiveSearch(value:Boolean){
+        _activeSearch.value = value
+    }
+
+
+
+    private val _searchHistoryList = mutableStateListOf<String>()
+    val searchHistoryList : List<String> get() = _searchHistoryList
+
+
+
+    fun addSearchHistory(query :String) {
+        _searchHistoryList.add(query)
+    }
+
+
 
      fun getAllProductsCategory()  {
         _successMessage.value = null

@@ -302,9 +302,9 @@ fun DetailProduct(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 CommonRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                    PriceText(fontSize = 13, title = "$${item.price}", color = Color(ShopAppConstants.AppPrimaryColor)) {
+                    PriceText(fontSize = 13, title = "$${item.price}", color = Color(ShopAppConstants.AppPrimaryColor))
 
-                    }
+
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         SeeAllText(title = "Category : ") {
 

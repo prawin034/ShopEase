@@ -10,12 +10,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.HorizontalDistribute
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -230,9 +232,13 @@ fun TxtButton(
     shape: RoundedCornerShape = RoundedCornerShape(12.dp),
     enabled :Boolean = true,
     contentPadding : PaddingValues = PaddingValues(5.dp),
+    icon: Boolean = false,
+    iconFound: ImageVector = Icons.Default.KeyboardArrowDown,
     onClick : () -> Unit
 ){
 
+
+    val image = if(icon) iconFound else null
     TextButton(
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
@@ -252,6 +258,11 @@ fun TxtButton(
             fontWeight = FontWeight.SemiBold,
             fontFamily = FontFamily.Monospace,
         )
+        if(icon) {
+            if (image != null) {
+                Icon(imageVector = image, contentDescription = "", modifier = Modifier.padding(horizontal = 5.dp), tint = Color.Black)
+            }
+        }
     }
 }
 

@@ -5,6 +5,7 @@ import com.example.shopease.feature_admin.data.model.AddToCartResponse
 import com.example.shopease.feature_admin.data.model.AllProductCategory
 import com.example.shopease.feature_admin.data.model.Product
 import com.example.shopease.feature_admin.data.model.ProductCategory
+import com.example.shopease.feature_admin.data.model.SearchProducts
 import com.example.shopease.feature_admin.data.model.UpdateCartRequest
 import com.example.shopease.feature_login.model.RegisterRequest
 import com.example.shopease.feature_login.model.loginRequest
@@ -55,4 +56,14 @@ interface ApiService {
     @PUT("/carts/{id}")
     suspend fun updateCart(@Path("id") id: Int, @Body payload:UpdateCartRequest) :Response<AddToCartResponse>
 
+
+    @GET("products/search")
+    suspend fun searchProducts(
+        @Query("q") query:String,
+        @Query("sortBy") sortBy :String,
+        @Query("order") order:String,
+    ) : Response<SearchProducts>
+
 }
+
+//https://dummyjson.com/products/search?q=laptop&sortBy=id&order=desc
