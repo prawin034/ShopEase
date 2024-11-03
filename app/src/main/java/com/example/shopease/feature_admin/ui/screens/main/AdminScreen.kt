@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import com.example.shopease.feature_admin.ui.screens.all.cart.CartScreen
+import com.example.shopease.feature_admin.ui.screens.all.categories.CategoriesScreen
 import com.example.shopease.feature_admin.ui.screens.all.home.HomeScreen
 import com.example.shopease.feature_admin.ui.screens.all.profile.ProfileScreen
 import com.example.shopease.feature_admin.ui.screens.all.search.SearchScreen
@@ -45,7 +46,7 @@ fun AdminScreen(
     searchViewModel: SearchViewModel
 ) {
 
-    val bottomList = listOf<String>("Home","Search","Profile","Cart")
+    val bottomList = listOf<String>("Home","Search", "Categories","Profile","Cart")
     val activeTab by commonViewModel.activeTabIndex.observeAsState()
     AppScaffold(
         topAppBar = {},
@@ -81,8 +82,9 @@ fun AdminScreen(
             when(activeTab) {
                 0 -> HomeScreen(navController,homeScreenViewModel)
                 1 -> SearchScreen(navController,homeScreenViewModel,commonViewModel,searchViewModel)
-                2 -> ProfileScreen(navController,loginViewModel)
-                3 -> CartScreen(navController , cartViewModel,commonViewModel)
+                2 -> CategoriesScreen(navController,homeScreenViewModel,searchViewModel,commonViewModel)
+                3 -> ProfileScreen(navController,loginViewModel)
+                4 -> CartScreen(navController , cartViewModel,commonViewModel)
             }
 
 

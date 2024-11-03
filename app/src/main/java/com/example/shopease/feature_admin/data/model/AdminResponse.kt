@@ -44,7 +44,7 @@ data class Product(
 
 
 data class SearchProducts(
-    val products: List<Product>
+    var products: List<Product>
 )
 
 data class Dimensions(

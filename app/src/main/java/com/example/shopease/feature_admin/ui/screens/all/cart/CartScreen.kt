@@ -74,9 +74,7 @@ fun CartScreen(navController: NavController,cartViewModel: CartViewModel,commonV
         topAppBar = {
 
                  CustomTopAppBar(navigationIcon = {
-                                  BackIconButton {
-                                      navController.popBackStack()
-                                  }                
+
                  }, titleContent = {
                      AppTxt(text = "Cart")
                  }) {

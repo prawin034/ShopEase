@@ -1,5 +1,6 @@
 package com.example.shopease.feature_admin.ui.viewModel.seach
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -40,7 +41,66 @@ class SearchViewModel(private val respository: ApiRepository) : ViewModel() {
             }
         }
     }
+
+
+
+
+
+    private val _checkList = mutableStateListOf<String>()
+    val checkList : List<String> get() = _checkList
+
+
+    private val _brandsList = mutableStateListOf<String>()
+    val brandsList : List<String> get() = _brandsList
+
+
+    fun removeCheckListItem(item:String){
+        _checkList.remove(item)
+    }
+    fun addCheckListItem(item:String){
+        _checkList.add(item)
+    }
+    fun clearCheckList(){
+        _checkList.clear()
+    }
+    fun updateBrandList(item:String){
+
+        _brandsList.add(item)
+    }
+    fun clearBrandList(){
+        _brandsList.clear()
+    }
+
+
+    //This function filters list based on brands
+    fun FilterProducts(
+        query:String,
+        sortBy:String,
+        order:String,
+        selectedBrand:List<String>
+    ) {
+        _successMsg.value = null
+        _failureMsg.value = null
+        viewModelScope.launch {
+            val result = respository.searchProducts(query,sortBy,order)
+            if(result.isSuccess) {
+                val response = result.getOrNull()
+                response.let { it ->
+                    val updatedList = it?.products?.filter { it.brand in selectedBrand }
+                    _searchProducts.postValue(SearchProducts(updatedList ?: emptyList()))
+                    _successMsg.value = "SuccessFully Loaded!"
+                }
+
+            }
+            else{
+                val exception = result.exceptionOrNull()
+                _failureMsg.value = "Error : ${exception?.message}"
+            }
+        }
+    }
+
 }
+
 
 
 

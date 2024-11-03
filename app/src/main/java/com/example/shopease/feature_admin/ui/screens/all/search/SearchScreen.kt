@@ -29,14 +29,17 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.PriceCheck
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,8 +47,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -89,12 +95,20 @@ fun SearchScreen(
 
     val sheetState = remember { mutableStateOf(false) }
     val currentSheetContent = remember { mutableStateOf(BottomSheetContent.SORT) }
+    val focusRequester = remember {FocusRequester()}
+
+    LaunchedEffect(Unit){
+        focusRequester.requestFocus()
+        homeScreenViewModel.updateActiveSearch(true)
+    }
     Scaffold { it ->
+
         androidx.compose.material3.SearchBar(
             modifier = Modifier
                 .padding(0.dp)
                 .fillMaxWidth()
                 .padding(bottom = 0.dp)
+                .focusRequester(focusRequester)
             ,
             query = query,
             onQueryChange = {value ->
@@ -106,8 +120,10 @@ fun SearchScreen(
                 homeScreenViewModel.updateActiveSearch(false)
                 if(query.isNotBlank()) {
 
-                homeScreenViewModel.addSearchHistory(query)
-                searchViewModel.searchProducts(query, sortBy= "title", order = "asc")
+                homeScreenViewModel.addSearchHistory(query.trimEnd())
+                searchViewModel.searchProducts(query.trimEnd(), sortBy= "title", order = "asc")
+                searchViewModel.clearBrandList()
+                searchViewModel.clearCheckList()
                 }
             },
             active = active ,
@@ -147,6 +163,7 @@ fun SearchScreen(
                             homeScreenViewModel.updateQuerySearch(it)
                         }
                         .fillMaxWidth()
+
                         .padding(all = 14.dp)
                 )
                 {
@@ -262,7 +279,7 @@ fun SearchScreen(
                 verticalArrangement = Arrangement.Top
             ) {
 
-                product(searchProducts?.products,homeScreenViewModel,searchViewModel,navController)
+                Product(searchProducts?.products,homeScreenViewModel,searchViewModel,navController)
 
             }
 
@@ -282,7 +299,7 @@ fun SearchScreen(
             BottomSheetContent.SORT -> SortContents(searchViewModel,homeScreenViewModel,sheetState)
             BottomSheetContent.FILTER -> FilterContent()
             BottomSheetContent.PRICE -> PriceContent()
-            else -> BrandContent()
+            else -> BrandContent(searchProducts?.products,searchViewModel,homeScreenViewModel)
         }
         
     }
@@ -291,7 +308,7 @@ fun SearchScreen(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun product(
+fun Product(
     products: List<Product>?,
     homeScreenViewModel: HomeScreenViewModel,
     searchViewModel: SearchViewModel,
@@ -304,7 +321,7 @@ fun product(
 
             Column {
                 Box(modifier = Modifier
-                    .height(150.dp)
+                    .height(200.dp)
                     .clickable {
                         scope.launch {
                             withContext(Dispatchers.Main) {
@@ -321,7 +338,7 @@ fun product(
                             .height(200.dp)
                             .padding(6.dp),
                         color = generateRandomColor(),
-                        contentScale = ContentScale.Inside
+                        contentScale = ContentScale.FillBounds
                     )
                 }
 
@@ -393,6 +410,7 @@ enum class SortContent(val displayName :String) {
 
 
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun SortContents(
     searchViewModel: SearchViewModel,
@@ -468,6 +486,88 @@ fun PriceContent() {
 
 
 @Composable
-fun BrandContent() {
-    AppTxt(text = "Brand")
+fun BrandContent(products: List<Product>?,
+searchViewModel: SearchViewModel,
+                 homeScreenViewModel: HomeScreenViewModel
+) {
+
+
+
+    val checkList  by remember { mutableStateOf(searchViewModel.checkList) }
+
+
+    val brands  by remember { mutableStateOf(searchViewModel.brandsList) }
+    val query by homeScreenViewModel.querySearch.observeAsState()
+
+
+    LaunchedEffect(Unit) {
+        if(brands.isEmpty()) {
+            for (item  in products ?: emptyList()) {
+                searchViewModel.updateBrandList(item.brand ?:"")
+            }
+        }
+
+    }
+
+
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.Center) {
+
+        LazyVerticalGrid(columns = GridCells.Fixed(2)){
+            itemsIndexed(brands) {index,item ->
+
+                CommonRow(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(checked = checkList.contains(item), onCheckedChange = {
+                        if(checkList.contains(item)) {
+                            searchViewModel.removeCheckListItem(item)
+                            searchViewModel.searchProducts(query ?:"", sortBy= "title", order = "asc")
+
+                        }
+                        else {
+                            searchViewModel.addCheckListItem(item)
+                        }
+                    })
+                    AppTxt(text = item ?:"", fontSize = 10.sp, modifier = Modifier.padding(horizontal = 3.dp), textAlign = TextAlign.Start)
+                }
+
+            }
+        }
+
+
+
+
+
+
+        CommonRow(modifier = Modifier.padding(5.dp)) {
+
+            TxtButton(
+                text = "Clear",
+                `font-size` = 10.sp,
+                backgroundColor = Color(0xFF81819E),
+                textColor = Color.Black,
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(1.dp)
+            ) {
+                searchViewModel.clearCheckList()
+                searchViewModel.searchProducts(query ?:"", sortBy= "title", order = "asc")
+
+            }
+
+            TxtButton(
+                text = "Apply",
+                `font-size` = 10.sp,
+                backgroundColor = Color(ShopAppConstants.AppPrimaryColor),
+                textColor = Color.White,
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(1.dp)
+            ) {
+//                searchViewModel.filterSearchList(list = checkList)
+                searchViewModel.FilterProducts(query ?:"", sortBy = "title", order = "asc", selectedBrand = checkList)
+            }
+
+
+
+        }
+
+
+    }
 }

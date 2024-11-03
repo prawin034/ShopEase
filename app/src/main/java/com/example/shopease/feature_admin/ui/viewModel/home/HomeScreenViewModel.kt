@@ -32,6 +32,9 @@ class HomeScreenViewModel(
     private val _getProductBasedOnHotSalesCategory = MutableLiveData<List<ProductCategory>?>(emptyList())
     val getProductBasedOnHotSalesCategory: LiveData<List<ProductCategory>?> get() = _getProductBasedOnHotSalesCategory
 
+    private val _getProductBasedOnCategory = MutableLiveData<ProductCategory>()
+    val getProductBasedOnCategory: LiveData<ProductCategory> get() = _getProductBasedOnCategory
+
     private val _getProductBasedOnBeautyCategory = MutableLiveData<List<ProductCategory>?>(emptyList())
     val getProductBasedOnBeautyCategory: LiveData<List<ProductCategory>?> get() = _getProductBasedOnBeautyCategory
 
@@ -89,6 +92,9 @@ class HomeScreenViewModel(
 
 
 
+
+
+
      fun getAllProductsCategory()  {
         _successMessage.value = null
         _failureMessage.value = null
@@ -117,6 +123,8 @@ class HomeScreenViewModel(
 
     }
 
+
+
     fun getProductBasedOnCategory(category:String){
         viewModelScope.launch {
             val result = withContext(Dispatchers.IO) {
@@ -128,6 +136,23 @@ class HomeScreenViewModel(
 
                     _getProductBasedOnHotSalesCategory.postValue(listOf(response))
 
+                }
+            }
+        }
+    }
+
+    fun getProductBasedCategory(category:String){
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                repository.getProductBasedOnCategory(category)
+            }
+            if(result.isSuccess) {
+                val response = result.getOrNull()
+                if(response !=null) {
+
+                    response?.let {
+                        _getProductBasedOnCategory.postValue(it)
+                    }
                 }
             }
         }

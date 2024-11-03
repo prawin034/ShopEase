@@ -82,9 +82,7 @@ fun ProfileScreen(navController: NavController,loginViewModel: LoginViewModel){
         topAppBar = {
            CustomTopAppBar(
                navigationIcon = {
-                     BackIconButton {
 
-                     }
                },
                titleContent = {
                    AppTxt(text = "Profile", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.SansSerif, textColor = Color.Black)

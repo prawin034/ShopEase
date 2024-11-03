@@ -628,7 +628,7 @@ fun AddToCartBottomBar(navController: NavController,cartViewModel: CartViewModel
                     )
                     {sucess ->
                         navController.navigate(Screen.AdminScreen.route)
-                        commonViewModel.changeActiveTab(3)
+                        commonViewModel.changeActiveTab(4)
                         cartViewModel.clearCounter()
                         Log.d("CartList","$cartList")
 

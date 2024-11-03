@@ -8,6 +8,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmarks
+import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
@@ -29,6 +30,7 @@ fun mapIconName(item: String): ImageVector {
         "cart" -> Icons.Default.ShoppingCart
         "search" -> Icons.Default.Search
         "profile" -> Icons.Default.Person
+        "categories" -> Icons.Default.Category
         else -> Icons.Default.Bookmarks
     }
 
