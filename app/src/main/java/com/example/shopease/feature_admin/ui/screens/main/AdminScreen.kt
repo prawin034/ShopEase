@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -54,6 +55,9 @@ fun AdminScreen(
                  CustomBottomBar {
                     bottomList.forEachIndexed { index, iconName ->
                         IconButton(
+                            colors = IconButtonDefaults.iconButtonColors(
+                                containerColor = if(activeTab == index) Color.Black else Color.Transparent
+                            ),
                             onClick = {
                                 commonViewModel.changeActiveTab(index)
                             }

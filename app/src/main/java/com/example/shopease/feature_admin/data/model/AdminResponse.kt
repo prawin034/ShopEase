@@ -1,6 +1,6 @@
 package com.example.shopease.feature_admin.data.model
 
-
+import java.time.YearMonth
 
 
 data class AllProductCategory(
@@ -99,4 +99,21 @@ data class CartResponseList(
     val discountPercentage :Double,
     val discountedTotal : Double,
     val thumbnail :String,
+)
+
+
+
+
+
+
+/* Card
+ */
+
+
+data class CardList(
+    val id :Int,
+    val cardNumber : Int,
+    val cardHolderName :String,
+    val expiryDate :YearMonth
+
 )

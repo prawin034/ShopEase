@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -51,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.shopease.feature_admin.navigation.Screen
 import com.example.shopease.feature_admin.ui.viewModel.CommonViewModel
 import com.example.shopease.feature_common.components.AppCard
 import com.example.shopease.feature_common.components.AppScaffold
@@ -127,7 +129,7 @@ fun ProfileScreen(navController: NavController,loginViewModel: LoginViewModel){
 
 
                   PersonalInformation(item)
-                  AccountSettings(loginData = item)
+                  AccountSettings(navController,loginData = item)
                   GeneralSettings()
               }
 
@@ -252,7 +254,7 @@ fun PersonalInformation(item: loginResponse) {
 
 
 @Composable
-fun AccountSettings(loginData: loginResponse) {
+fun AccountSettings(navController: NavController,loginData: loginResponse) {
     val settings = listOf("Edit Profile","Shopping Address","WishList","Orders","Cards")
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -275,7 +277,9 @@ fun AccountSettings(loginData: loginResponse) {
                 CommonRow(
                     modifier = Modifier
                         .clickable {
-
+                            when(item) {
+                                 "Cards" -> navController.navigate(Screen.CardsScreen.route)
+                            }
                         }
                         .padding(0.dp)
                         .fillMaxWidth()
@@ -326,7 +330,7 @@ fun GeneralSettings() {
     val appTheme by commonViewModel.isDarkTheme.observeAsState(initial = getTheme(context))
     Column(modifier = Modifier
         .fillMaxWidth()
-        .padding(top = 20.dp), horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.Center)
+        .padding(top = 20.dp, bottom = 20.dp), horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.Center)
     {
         AppTxt(
             text = "General",
@@ -339,7 +343,6 @@ fun GeneralSettings() {
         AppCard(
             enableDefaultPadding = false,
             modifier = Modifier.fillMaxWidth(),
-
             ) {
 
             CommonRow(
@@ -349,7 +352,7 @@ fun GeneralSettings() {
                     }
                     .padding(0.dp)
                     .fillMaxWidth()
-                    .padding(20.dp)
+                    .padding(10.dp)
 
                 ,
                 horizontalArrangement = Arrangement.SpaceBetween,

@@ -18,6 +18,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.shopease.feature_admin.data.remote.ApiRepository
 import com.example.shopease.feature_admin.navigation.App
+import com.example.shopease.feature_admin.ui.viewModel.CardViewModel
 import com.example.shopease.feature_admin.ui.viewModel.CommonViewModel
 import com.example.shopease.feature_admin.ui.viewModel.cart.CartViewModel
 import com.example.shopease.feature_admin.ui.viewModel.cart.CartViewModelFactory
@@ -35,6 +36,7 @@ import com.example.shopease.ui.theme.ShopEaseTheme
 class MainActivity : ComponentActivity() {
 
     private val commonViewModel by viewModels<CommonViewModel>()
+    private val cardViewModel by viewModels<CardViewModel>()
     private lateinit var homeScreenViewModel : HomeScreenViewModel
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var  registrationViewModel: RegistrationViewModel
@@ -79,7 +81,8 @@ class MainActivity : ComponentActivity() {
                        loginViewModel,
                        registrationViewModel,
                        cartViewModel,
-                       searchViewModel
+                       searchViewModel,
+                       cardViewModel
                    )
                 }
             }

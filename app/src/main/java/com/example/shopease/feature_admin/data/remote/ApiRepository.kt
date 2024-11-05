@@ -12,6 +12,8 @@ import com.example.shopease.feature_admin.data.model.UpdateCartRequest
 import com.example.shopease.feature_login.model.RegisterRequest
 import com.example.shopease.feature_login.model.loginRequest
 import com.example.shopease.feature_login.model.loginResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class ApiRepository(private val context: Context) {
@@ -72,54 +74,59 @@ class ApiRepository(private val context: Context) {
 
      */
     suspend fun getAllProductCategory() : Result<List<AllProductCategory>> {
-        return  try {
-            val response = apiService.getAllProductsCategory()
-            if(response.isSuccessful) {
-                val shopEaseResponse = response.body()
-                if(shopEaseResponse !=null) Result.success(shopEaseResponse)
-                else Result.failure(Exception("Get All product category response body is null"))
-            }
-            else{
-                Result.failure(Exception(" Request failed with code ${response.code()}"))
-            }
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = apiService.getAllProductsCategory()
+                if(response.isSuccessful) {
+                    val shopEaseResponse = response.body()
+                    if(shopEaseResponse !=null) Result.success(shopEaseResponse)
+                    else Result.failure(Exception("Get All product category response body is null"))
+                }
+                else{
+                    Result.failure(Exception(" Request failed with code ${response.code()}"))
+                }
 
-        }catch (e:Exception){
+            }catch (e:Exception){
                 Result.failure(Exception("Request failed: ${e.message}"))
+            }
         }
-
     }
     suspend fun getProductBasedOnCategory(category:String) : Result<ProductCategory> {
-        return  try {
-            val response = apiService.getProductBasedOnCategory(category)
-            if(response.isSuccessful) {
-                val shopEaseResponse = response.body()
-                if(shopEaseResponse !=null) Result.success(shopEaseResponse)
-                else Result.failure(Exception("Get  product based on  category response body is null"))
-            }
-            else{
-                Result.failure(Exception(" Request failed with code ${response.code()}"))
+        return withContext(Dispatchers.IO){
+            try {
+                val response = apiService.getProductBasedOnCategory(category)
+                if(response.isSuccessful) {
+                    val shopEaseResponse = response.body()
+                    if(shopEaseResponse !=null) Result.success(shopEaseResponse)
+                    else Result.failure(Exception("Get  product based on  category response body is null"))
+                }
+                else{
+                    Result.failure(Exception(" Request failed with code ${response.code()}"))
+                }
+
+            }catch (e:Exception){
+                Result.failure(Exception("Request failed: ${e.message}"))
             }
 
-        }catch (e:Exception){
-            Result.failure(Exception("Request failed: ${e.message}"))
         }
-
     }
 
     suspend fun getSingleProduct(id:Int) : Result<Product> {
-        return  try {
-            val response = apiService.getSingleProduct(id)
-            if(response.isSuccessful) {
-                val shopEaseResponse = response.body()
-                if(shopEaseResponse !=null) Result.success(shopEaseResponse)
-                else Result.failure(Exception("Get  product based on  category response body is null"))
-            }
-            else{
-                Result.failure(Exception(" Request failed with code ${response.code()}"))
-            }
+        return withContext(Dispatchers.IO)  {
+            try {
+                val response = apiService.getSingleProduct(id)
+                if(response.isSuccessful) {
+                    val shopEaseResponse = response.body()
+                    if(shopEaseResponse !=null) Result.success(shopEaseResponse)
+                    else Result.failure(Exception("Get  product based on  category response body is null"))
+                }
+                else{
+                    Result.failure(Exception(" Request failed with code ${response.code()}"))
+                }
 
-        }catch (e:Exception){
-            Result.failure(Exception("Request failed: ${e.message}"))
+            }catch (e:Exception){
+                Result.failure(Exception("Request failed: ${e.message}"))
+            }
         }
 
     }

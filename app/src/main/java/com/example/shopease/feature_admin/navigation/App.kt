@@ -16,7 +16,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.shopease.feature_admin.ui.screens.all.details.DetailsScreen
+import com.example.shopease.feature_admin.ui.screens.all.profile.CardsScreen
 import com.example.shopease.feature_admin.ui.screens.main.AdminScreen
+import com.example.shopease.feature_admin.ui.viewModel.CardViewModel
 import com.example.shopease.feature_admin.ui.viewModel.CommonViewModel
 import com.example.shopease.feature_admin.ui.viewModel.cart.CartViewModel
 import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
@@ -39,14 +41,15 @@ fun App(
     loginViewModel: LoginViewModel,
     registrationViewModel: RegistrationViewModel,
     cartViewModel: CartViewModel,
-    searchViewModel: SearchViewModel
+    searchViewModel: SearchViewModel,
+    cardViewModel: CardViewModel
 ) {
 
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
-        startDestination = Screen.AdminScreen.route
+        startDestination = Screen.LoginScreen.route
     ) {
 
         composable(
@@ -83,6 +86,35 @@ fun App(
         ){backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id")
             DetailsScreen(navController,homeScreenViewModel,id,cartViewModel,commonViewModel)
+        }
+
+
+        composable(
+            Screen.CardsScreen.route,
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                ) + slideIntoContainer(
+                    animationSpec = tween(300, easing = EaseIn),
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(
+                        300, easing = LinearEasing
+                    )
+                ) + slideOutOfContainer(
+                    animationSpec = tween(300, easing = EaseOut),
+                    towards = AnimatedContentTransitionScope.SlideDirection.End
+                )
+            }
+        ) {
+
+            CardsScreen(navController,cardViewModel)
+
         }
 
 

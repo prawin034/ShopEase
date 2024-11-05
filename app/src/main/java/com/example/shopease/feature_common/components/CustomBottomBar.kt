@@ -32,7 +32,8 @@ fun CustomBottomBar(
         modifier = Modifier
             .fillMaxWidth()
             .navigationBarsPadding()
-            .padding(horizontal = 25.dp, vertical = 0.dp)
+            .height(80.dp)
+            .padding(horizontal = 25.dp, vertical = 10.dp)
             .clip(shape = RoundedCornerShape(17.dp)) ,
         containerColor = Color(ShopAppConstants.AppBottomBarContainerColor),
         contentColor = Color(ShopAppConstants.AppIconColor),

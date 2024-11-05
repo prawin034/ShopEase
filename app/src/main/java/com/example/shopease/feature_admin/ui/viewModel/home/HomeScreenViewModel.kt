@@ -1,5 +1,6 @@
 package com.example.shopease.feature_admin.ui.viewModel.home
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
@@ -99,10 +100,7 @@ class HomeScreenViewModel(
         _successMessage.value = null
         _failureMessage.value = null
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                repository.getAllProductCategory()
-            }
-
+            val result = repository.getAllProductCategory()
             if(result.isSuccess) {
                 val response = result.getOrNull()
                 if(response !=null) {
@@ -124,18 +122,15 @@ class HomeScreenViewModel(
     }
 
 
-
-    fun getProductBasedOnCategory(category:String){
+    fun getProductBasedOnCategory(category: String) {
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                repository.getProductBasedOnCategory(category)
-            }
-            if(result.isSuccess) {
+            val result = repository.getProductBasedOnCategory(category)
+            if (result.isSuccess) {
                 val response = result.getOrNull()
-                if(response !=null) {
-
-                    _getProductBasedOnHotSalesCategory.postValue(listOf(response))
-
+                if (response != null) {
+                    withContext(Dispatchers.Main) {
+                        _getProductBasedOnHotSalesCategory.postValue(listOf(response))
+                    }
                 }
             }
         }
@@ -143,9 +138,8 @@ class HomeScreenViewModel(
 
     fun getProductBasedCategory(category:String){
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                repository.getProductBasedOnCategory(category)
-            }
+            val result = repository.getProductBasedOnCategory(category)
+
             if(result.isSuccess) {
                 val response = result.getOrNull()
                 if(response !=null) {
@@ -161,9 +155,8 @@ class HomeScreenViewModel(
     fun getProductBasedOnBeautyCategory(category:String){
         viewModelScope.launch {
 
-            val result = withContext(Dispatchers.IO) {
-                repository.getProductBasedOnCategory(category)
-            }
+            val result = repository.getProductBasedOnCategory(category)
+
             if(result.isSuccess) {
                 val response = result.getOrNull()
                 if(response !=null) {
@@ -177,9 +170,8 @@ class HomeScreenViewModel(
 
     fun getProductBasedOnFurnitureCategory(category:String){
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                repository.getProductBasedOnCategory(category)
-            }
+            val result = repository.getProductBasedOnCategory(category)
+
             if(result.isSuccess) {
                 val response = result.getOrNull()
                 if(response !=null) {
@@ -193,9 +185,8 @@ class HomeScreenViewModel(
 
     fun getProductBasedOnGroceryCategory(category:String){
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                repository.getProductBasedOnCategory(category)
-            }
+            val result = repository.getProductBasedOnCategory(category)
+
             if(result.isSuccess) {
                 val response = result.getOrNull()
                 if(response !=null) {
@@ -208,9 +199,8 @@ class HomeScreenViewModel(
     }
     fun getProductBasedOnWomenDressCategory(category:String){
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                repository.getProductBasedOnCategory(category)
-            }
+            val result = repository.getProductBasedOnCategory(category)
+
             if(result.isSuccess) {
                 val response = result.getOrNull()
                 if(response !=null) {
@@ -225,16 +215,19 @@ class HomeScreenViewModel(
 
     fun getSingleProduct(id: Int) {
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) { repository.getSingleProduct(id) }
-
-            if (result.isSuccess) {
-                result.getOrNull()?.let { response ->
-                    _getSingleProduct.postValue(listOf(response)) // assuming _getSingleProduct is MutableLiveData<Product?>
+            val result =  repository.getSingleProduct(id)
+            when {
+                result.isSuccess -> {
+                    result.getOrNull()?.let { response ->
+                        _getSingleProduct.postValue(listOf(response)) // assuming _getSingleProduct is MutableLiveData<Product?>
+                    }
                 }
-            } else {
-                val exception = result.exceptionOrNull()
-                _failureMessage.value = "Failed: ${exception?.localizedMessage ?: "Unknown Error"}"
+                result.isFailure -> {
+                    val exception = result.exceptionOrNull()
+                    _failureMessage.value = "Failed: ${exception?.localizedMessage ?: "Unknown Error"}"
+                }
             }
+
         }
     }
 
@@ -259,6 +252,11 @@ class HomeScreenViewModel(
 //        }
 //    }
 
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("ViewModelScope","cleared and caancelled")
+    }
 }
 
 

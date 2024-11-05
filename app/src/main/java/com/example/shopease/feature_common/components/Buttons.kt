@@ -234,6 +234,7 @@ fun TxtButton(
     contentPadding : PaddingValues = PaddingValues(5.dp),
     icon: Boolean = false,
     iconFound: ImageVector = Icons.Default.KeyboardArrowDown,
+    appendIconFront :Boolean = false,
     onClick : () -> Unit
 ){
 
@@ -251,6 +252,14 @@ fun TxtButton(
             onClick.invoke()
         }
     ) {
+        if(appendIconFront){
+            if(icon) {
+                if (image != null) {
+                    Icon(imageVector = image, contentDescription = "", modifier = Modifier.padding(horizontal = 5.dp), tint = Color.Black)
+                }
+            }
+        }
+
         Text(
             text = text,
             fontSize = `font-size`,
@@ -258,9 +267,12 @@ fun TxtButton(
             fontWeight = FontWeight.SemiBold,
             fontFamily = FontFamily.Monospace,
         )
-        if(icon) {
-            if (image != null) {
-                Icon(imageVector = image, contentDescription = "", modifier = Modifier.padding(horizontal = 5.dp), tint = Color.Black)
+
+        if(!appendIconFront){
+            if(icon) {
+                if (image != null) {
+                    Icon(imageVector = image, contentDescription = "", modifier = Modifier.padding(horizontal = 5.dp), tint = Color.Black)
+                }
             }
         }
     }
