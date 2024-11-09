@@ -5,24 +5,31 @@ import android.util.Log
 import com.example.shopease.feature_admin.data.model.AddToCartRequest
 import com.example.shopease.feature_admin.data.model.AddToCartResponse
 import com.example.shopease.feature_admin.data.model.AllProductCategory
+import com.example.shopease.feature_admin.data.model.BinLookUpList
 import com.example.shopease.feature_admin.data.model.Product
 import com.example.shopease.feature_admin.data.model.ProductCategory
 import com.example.shopease.feature_admin.data.model.SearchProducts
 import com.example.shopease.feature_admin.data.model.UpdateCartRequest
+import com.example.shopease.feature_login.dataStore.getToken
 import com.example.shopease.feature_login.model.RegisterRequest
 import com.example.shopease.feature_login.model.loginRequest
 import com.example.shopease.feature_login.model.loginResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 
-class ApiRepository(private val context: Context) {
+class ApiRepository @Inject constructor(context: Context) {
 
 
-    private val apiService : ApiService = RetrofitClient.createRetrofitClient(context)
+    private val apiService : ApiService = RetrofitClient.createRetrofitClient(context, serviceClass = ApiService::class.java, token = getToken(context), isNeutrinoService = false)
 
 
-
+    private val apiServiceNeutrino : NeutrinoService = RetrofitClient.createRetrofitClient(context,baseUrl = Constants.BASE_URL_NEUTRINO_API,
+        serviceClass = NeutrinoService::class.java,
+        token = "DvPqMn40V5Nyw2LGtbkyueOOJI9X6OY2p2VdtqBmTgM8vlTi",
+        isNeutrinoService = true
+    )
     /* Login Panel
 
      */
@@ -210,6 +217,23 @@ class ApiRepository(private val context: Context) {
         }
     }
 
+
+    suspend fun binlookup(cardnumber: Int): Result<BinLookUpList> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = apiServiceNeutrino.binlookUp(binNumber = cardnumber)
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null) Result.success(responseBody)
+                    else Result.failure(Exception("Response body is null"))
+                } else {
+                    Result.failure(Exception("Request failed with code ${response.code()}"))
+                }
+            } catch (e: Exception) {
+                Result.failure(Exception("Request failed : ${e.message}"))
+            }
+        }
+    }
 
 
 }

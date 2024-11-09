@@ -13,13 +13,14 @@ import com.example.shopease.feature_admin.data.model.AllProductCategory
 import com.example.shopease.feature_admin.data.model.Product
 import com.example.shopease.feature_admin.data.model.ProductCategory
 import com.example.shopease.feature_admin.data.remote.ApiRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class HomeScreenViewModel(
-    private val repository: ApiRepository
-) : ViewModel()
+@HiltViewModel
+class HomeScreenViewModel @Inject constructor(private val repository: ApiRepository) : ViewModel()
 {
 
 

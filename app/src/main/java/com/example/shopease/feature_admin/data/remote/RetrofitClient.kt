@@ -20,10 +20,10 @@ object RetrofitClient {
     // 2 -> OkhttpClient
 
 
-    private fun okhttpClient(context: Context): OkHttpClient {
+    private fun okhttpClient(context: Context, token: String?,isNeutrinoService:Boolean): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
-            .addInterceptor(HeaderInterceptor(getToken(context)))
+            .addInterceptor(HeaderInterceptor(isNeutrinoService,token))
             .readTimeout(10L, TimeUnit.SECONDS)
             .writeTimeout(10L, TimeUnit.SECONDS)
             .connectTimeout(10L, TimeUnit.SECONDS)
@@ -35,13 +35,18 @@ object RetrofitClient {
 //     val retrofitInstance : ApiService by lazy {
 //        createRetrofitClient()
 //    }
-    fun createRetrofitClient(context: Context) : ApiService {
+    fun<T> createRetrofitClient(
+    context: Context,
+    baseUrl :String = BASE_URL,serviceClass:Class<T>,
+    token : String? =null,
+    isNeutrinoService: Boolean,
+    ) : T {
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(okhttpClient(context))
+            .client(okhttpClient(context,token,isNeutrinoService))
             .build()
-        return  retrofit.create(ApiService::class.java)
+        return  retrofit.create(serviceClass)
     }
 }

@@ -11,11 +11,14 @@ import com.example.shopease.feature_admin.data.model.AddToCartRequest
 import com.example.shopease.feature_admin.data.model.AddToCartResponse
 import com.example.shopease.feature_admin.data.model.UpdateCartRequest
 import com.example.shopease.feature_admin.data.remote.ApiRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class CartViewModel(private val repository: ApiRepository) :ViewModel() {
+@HiltViewModel
+class CartViewModel @Inject constructor(private val repository: ApiRepository) :ViewModel() {
 
     private val _cartList = MutableLiveData<List<AddToCartResponse>?>()
     val cartList : LiveData<List<AddToCartResponse>?> get() = _cartList

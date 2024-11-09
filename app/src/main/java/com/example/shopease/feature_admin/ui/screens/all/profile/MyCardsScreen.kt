@@ -1,5 +1,7 @@
 package com.example.shopease.feature_admin.ui.screens.all.profile
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,6 +18,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.PagerDefaults
@@ -29,27 +33,34 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.PersonOutline
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.substring
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.shopease.feature_admin.data.model.CardList
 import com.example.shopease.feature_admin.ui.screens.all.search.EmptyData
 import com.example.shopease.feature_admin.ui.viewModel.CardViewModel
 import com.example.shopease.feature_common.components.AppBottomSheet
@@ -65,6 +76,8 @@ import com.example.shopease.feature_common.components.iconBtn
 import com.example.shopease.feature_common.utils.ShopAppConstants
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import java.time.YearMonth
+import java.util.UUID
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -184,7 +197,7 @@ fun CardDetailsSheet(
             val myScreen = myPage[it]
             
             when(myScreen){
-                "Details" ->  CardDetails1(pager)
+                "Details" ->  CardDetails1(pager,cardViewModel)
                 "CardStyle" -> CardDetails2(pager,cardViewModel)
             }
             
@@ -205,8 +218,13 @@ fun CardDetailsSheet(
 
 
 @Composable
-fun CardDetails1(pager: PagerState) {
+fun CardDetails1(pager: PagerState, cardViewModel: CardViewModel) {
     val scope = rememberCoroutineScope()
+
+    var cardList  by remember { mutableStateOf(CardList(UUID.randomUUID().toString(),"","","","")) }
+    
+    val binlookup by cardViewModel.binlookupList.observeAsState(initial = emptyList())
+    
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -226,20 +244,39 @@ fun CardDetails1(pager: PagerState) {
 
 
 
+        
+
         CmnTxtField(
-            value = "",
+            value = cardList.cardNumber.toString(),
             label = {
                 AppTxt(text = "Card Number")
             },
             leadingIcon = { /*TODO*/ },
             trailingIcon = {
+                if(binlookup.isEmpty()){
                 Icon(imageVector = Icons.Default.CreditCard, contentDescription = "Card", tint = Color.Black)
+                }
+                else {
+                  AppTxt(text = binlookup[0].cardBrand)
+                }
             },
             placeHolder = {
-                AppTxt(text = "XXXX XXXX XXXX XXXX ")
+
+                AppTxt(text = "XXXX XXXX XXXX XXXX")
             },
-            visualTransformation = VisualTransformation.None,
-            onValueChange = {},
+            visualTransformation = CardNumberFormatTransformation(),
+
+            onValueChange = {newValue ->
+                            cardList = cardList.copy(cardNumber = newValue)
+                if (newValue.length >= 6 && newValue.all { it.isDigit() }) {
+                    // Convert to integer and call getBinList
+                   cardViewModel.getBinList(newValue.take(6).toInt())
+                }
+//                else {
+//                    cardViewModel.clearbin()
+//                }
+               
+            },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
@@ -251,7 +288,7 @@ fun CardDetails1(pager: PagerState) {
 
 
         CmnTxtField(
-            value = "",
+            value = cardList.cardHolderName ?:"",
             label = {
                 AppTxt(text = "CardHolder Name")
             },
@@ -264,7 +301,9 @@ fun CardDetails1(pager: PagerState) {
             },
             visualTransformation = VisualTransformation.None,
 
-            onValueChange = {},
+            onValueChange = {
+                             cardList = cardList.copy(cardHolderName = it)
+            },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -279,7 +318,7 @@ fun CardDetails1(pager: PagerState) {
 
 
             CmnTxtField(
-                value = "",
+                value = cardList.expiryDate ?:"",
                 label = {
                     AppTxt(text = "Expiry")
                 },
@@ -291,8 +330,10 @@ fun CardDetails1(pager: PagerState) {
                 placeHolder = {
                     AppTxt(text = "MM/YY")
                 },
-                visualTransformation = VisualTransformation.None,
-                onValueChange = {},
+                visualTransformation = expiryDateTransformation(),
+                onValueChange = {
+                             cardList = cardList.copy(expiryDate = it)
+                },
                 modifier = Modifier
                     .weight(0.3f)
                     .padding(5.dp)
@@ -300,7 +341,7 @@ fun CardDetails1(pager: PagerState) {
 
 
             CmnTxtField(
-                value = "",
+                value = cardList.cvv ?:"",
                 label = {
                     AppTxt(text = "Cvv")
                 },
@@ -313,7 +354,9 @@ fun CardDetails1(pager: PagerState) {
 
                 },
                 visualTransformation = VisualTransformation.None,
-                onValueChange = {},
+                onValueChange = {
+                       cardList = cardList.copy(cvv = it)
+                },
                 modifier = Modifier
                     .weight(0.3f)
                     .padding(5.dp)
@@ -321,15 +364,8 @@ fun CardDetails1(pager: PagerState) {
 
 
         }
-
-
-
         SpacerCommon()
         SpacerCommon()
-
-
-
-
 
         TxtButton(text = "Next", `font-size` = 13.sp, textColor = Color.White,
             backgroundColor = Color(ShopAppConstants.AppPrimaryColor),
@@ -341,13 +377,14 @@ fun CardDetails1(pager: PagerState) {
             scope.launch {
                 coroutineScope {
                     pager.animateScrollToPage(1)
+                  val id =   cardViewModel.addToCard(cardList)
+                    cardViewModel.addCardId(id)
                 }
             }
 
 
 
         }
-
 
 
         SpacerCommon()
@@ -363,6 +400,7 @@ fun CardDetails1(pager: PagerState) {
 @Composable
 fun CardDetails2(pager: PagerState,cardViewModel: CardViewModel) {
     val scope = rememberCoroutineScope()
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -430,10 +468,21 @@ fun CardDetails2(pager: PagerState,cardViewModel: CardViewModel) {
 
 
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun MyCard(cardViewModel: CardViewModel){
       val colorsList = listOf("Dark-Purple","Black","Blue","Green","Dark-Gray","Pink","orange")
     val selectedColor by remember { mutableStateOf(cardViewModel.selectedColorName) }
+
+
+
+    //var updatedCardList by remember { mutableStateOf(CardList("","","","","")) }
+
+
+
+    val cardId  = cardViewModel.cardId
+
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -483,7 +532,11 @@ fun MyCard(cardViewModel: CardViewModel){
             Column(modifier = Modifier
 
                 .padding(4.dp)
-                .border(1.dp, color = if(selectedColor.value == s) Color.Blue else Color.Transparent, shape = RoundedCornerShape(12.dp))
+                .border(
+                    1.dp,
+                    color = if (selectedColor.value == s) Color.Blue else Color.Transparent,
+                    shape = RoundedCornerShape(12.dp)
+                )
                 .padding(4.dp)
                 .padding(horizontal = 30.dp)
 
@@ -497,6 +550,7 @@ fun MyCard(cardViewModel: CardViewModel){
                     modifier = Modifier
                         .clickable {
                             cardViewModel.updateSelectedColor(s)
+
                         }
                         .width(100.dp)
                         .height(100.dp)
@@ -527,7 +581,9 @@ fun MyCard(cardViewModel: CardViewModel){
             .fillMaxWidth(0.8f)
             .height(65.dp)
     ) {
+        cardViewModel.updateCardColorById(id = cardId.value, cardColor = mapColor(selectedColor.value))
 
+        Log.d("CarList","${cardViewModel.cardList}")
     }
 
 
@@ -547,4 +603,101 @@ fun mapColor(colorName:String) :Color {
         else -> Color(ShopAppConstants.AppPrimaryColor)
 
     }
+}
+
+
+
+class CardNumberFormatTransformation : VisualTransformation {
+    override fun filter(text: AnnotatedString): TransformedText {
+        // Keep only the first 16 digits of input and apply the format
+        val trimmedText = text.text.filter { it.isDigit() }.take(16)
+
+        // Insert spaces after every 4th character for the formatted display
+        val formattedText = buildString {
+            trimmedText.forEachIndexed { index, char ->
+                if (index > 0 && index % 4 == 0) append(" ")
+                append(char)
+            }
+            if (length < 19) { // 19 = 16 digits + 3 spaces
+                for (i in length until 19) {
+                    if (i % 5 == 4) append(" ") // Space every 4 digits
+                    else append("X")
+                }
+            }
+        }
+
+        val offsetMapping = object : OffsetMapping {
+            override fun originalToTransformed(offset: Int): Int {
+                // Calculate how many spaces have been added by the offset position
+               val transformedOffset = offset + (offset /4)
+                return transformedOffset.coerceAtMost(formattedText.length)
+            }
+
+            override fun transformedToOriginal(offset: Int): Int {
+                val originalOffset = offset  - (offset /5)
+                return originalOffset.coerceAtMost(trimmedText.length)
+            }
+        }
+
+        return TransformedText(
+            text = AnnotatedString(formattedText),
+            offsetMapping = offsetMapping
+        )
+    }
+}
+
+
+
+class expiryDateTransformation() : VisualTransformation {
+
+    override fun filter(text: AnnotatedString): TransformedText {
+
+        val trimmedText =  text.text.filter { it.isDigit() }.take(4)
+
+
+
+        val formatText  = buildString {
+
+            trimmedText.mapIndexed {index: Int, c: Char ->
+                if(index == 2) append("/")
+                append(c)
+            }.joinToString("")
+
+            while (length < 5) {
+                if(length == 2) append("/")
+                if(length <2) append("M")
+                if(length >2) append("Y")
+            }
+
+
+        }
+
+
+        val offsetMapping = object : OffsetMapping {
+            override fun originalToTransformed(offset: Int): Int {
+              if(offset <=0) return  offset
+
+               val formattedOffset = offset + (offset /2)
+               return  formattedOffset.coerceAtMost(formatText.length)
+
+
+            }
+
+            override fun transformedToOriginal(offset: Int): Int {
+                // Mapping from transformed back to original text positions
+                val transformedOff = offset - (offset /2)
+                return  transformedOff.coerceAtMost(trimmedText.length)
+
+            }
+        }
+
+
+        return  TransformedText(
+            text = AnnotatedString(formatText),
+            offsetMapping = offsetMapping
+        )
+
+
+    }
+
 }

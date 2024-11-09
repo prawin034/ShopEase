@@ -15,54 +15,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.ViewModelProvider
-import com.example.shopease.feature_admin.data.remote.ApiRepository
 import com.example.shopease.feature_admin.navigation.App
 import com.example.shopease.feature_admin.ui.viewModel.CardViewModel
 import com.example.shopease.feature_admin.ui.viewModel.CommonViewModel
 import com.example.shopease.feature_admin.ui.viewModel.cart.CartViewModel
-import com.example.shopease.feature_admin.ui.viewModel.cart.CartViewModelFactory
 import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
-import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModelFactory
 import com.example.shopease.feature_admin.ui.viewModel.seach.SearchViewModel
-import com.example.shopease.feature_admin.ui.viewModel.seach.SearchViewModelFactory
 import com.example.shopease.feature_login.dataStore.getTheme
 import com.example.shopease.feature_login.ui.viewModel.loginViewModel.LoginViewModel
-import com.example.shopease.feature_login.ui.viewModel.loginViewModel.LoginViewModelFactory
 import com.example.shopease.feature_login.ui.viewModel.registrationViewModel.RegistrationViewModel
-import com.example.shopease.feature_login.ui.viewModel.registrationViewModel.RegistrationViewModelFactory
 import com.example.shopease.ui.theme.ShopEaseTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val commonViewModel by viewModels<CommonViewModel>()
     private val cardViewModel by viewModels<CardViewModel>()
-    private lateinit var homeScreenViewModel : HomeScreenViewModel
-    private lateinit var loginViewModel: LoginViewModel
-    private lateinit var  registrationViewModel: RegistrationViewModel
-    private lateinit var cartViewModel: CartViewModel
-    private lateinit var searchViewModel: SearchViewModel
+    private  val  homeScreenViewModel by viewModels<HomeScreenViewModel>()
+    private  val  loginViewModel by viewModels<LoginViewModel>()
+    private  val  registrationViewModel by viewModels<RegistrationViewModel>()
+    private  val  cartViewModel by viewModels<CartViewModel>()
+    private  val  searchViewModel by viewModels<SearchViewModel>()
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //api Repository instance
-        val apiRepository  = ApiRepository(applicationContext)
-
-
-        //viewModelFactory
-        val factory = HomeScreenViewModelFactory(apiRepository)
-        val loginFactory = LoginViewModelFactory(apiRepository)
-        val registerFactory = RegistrationViewModelFactory(apiRepository)
-        val cartFactory = CartViewModelFactory(apiRepository)
-        val searchFactory = SearchViewModelFactory(apiRepository)
-        //create viewModel
-
-        homeScreenViewModel = ViewModelProvider(owner = this, factory = factory)[HomeScreenViewModel::class.java]
-        loginViewModel = ViewModelProvider(this, factory = loginFactory)[LoginViewModel::class.java]
-        registrationViewModel = ViewModelProvider(this,registerFactory)[RegistrationViewModel::class.java]
-        cartViewModel = ViewModelProvider(this,cartFactory)[CartViewModel::class.java]
-        searchViewModel = ViewModelProvider(this,searchFactory)[SearchViewModel::class.java]
        WindowCompat.setDecorFitsSystemWindows(window,false)
       // enableEdgeToEdge()
         setContent {

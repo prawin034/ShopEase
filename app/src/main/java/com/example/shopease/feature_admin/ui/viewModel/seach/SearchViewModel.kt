@@ -8,9 +8,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.shopease.feature_admin.data.model.SearchProducts
 import com.example.shopease.feature_admin.data.remote.ApiRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchViewModel(private val respository: ApiRepository) : ViewModel() {
+@HiltViewModel
+class SearchViewModel @Inject constructor(private val respository: ApiRepository) : ViewModel() {
 
     private val _searchProducts = MutableLiveData<SearchProducts>()
     val searchProducts : LiveData<SearchProducts> get() = _searchProducts

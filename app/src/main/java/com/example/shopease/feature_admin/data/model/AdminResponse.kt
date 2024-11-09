@@ -1,6 +1,9 @@
 package com.example.shopease.feature_admin.data.model
 
+import androidx.compose.ui.graphics.Color
+import com.google.gson.annotations.SerializedName
 import java.time.YearMonth
+import java.util.UUID
 
 
 data class AllProductCategory(
@@ -111,9 +114,37 @@ data class CartResponseList(
 
 
 data class CardList(
-    val id :Int,
-    val cardNumber : Int,
-    val cardHolderName :String,
-    val expiryDate :YearMonth
+    val id : String = UUID.randomUUID().toString(),
+    val cardNumber : String?,
+    val cardHolderName :String?,
+    val expiryDate :String?,
+    val cvv :String?,
+    val cardColor : Color = Color.Black
 
+)
+
+
+data class BinLookUpList(
+    @SerializedName("bin-number") val binNumber: String,
+    @SerializedName("card-brand") val cardBrand: String,
+    @SerializedName("card-category") val cardCategory: String,
+    @SerializedName("card-type") val cardType: String,
+    @SerializedName("country") val country: String,
+    @SerializedName("country-code") val countryCode: String,
+    @SerializedName("country-code3") val countryCode3: String,
+    @SerializedName("currency-code") val currencyCode: String,
+    @SerializedName("ip-blocklisted") val ipBlocklisted: Boolean,
+    @SerializedName("ip-blocklists") val ipBlocklists: List<String>,
+    @SerializedName("ip-city") val ipCity: String?,
+    @SerializedName("ip-country") val ipCountry: String?,
+    @SerializedName("ip-country-code") val ipCountryCode: String?,
+    @SerializedName("ip-country-code3") val ipCountryCode3: String?,
+    @SerializedName("ip-matches-bin") val ipMatchesBin: Boolean,
+    @SerializedName("ip-region") val ipRegion: String?,
+    @SerializedName("is-commercial") val isCommercial: Boolean,
+    @SerializedName("is-prepaid") val isPrepaid: Boolean,
+    @SerializedName("issuer") val issuer: String,
+    @SerializedName("issuer-phone") val issuerPhone: String?,
+    @SerializedName("issuer-website") val issuerWebsite: String?,
+    @SerializedName("valid") val valid: Boolean
 )

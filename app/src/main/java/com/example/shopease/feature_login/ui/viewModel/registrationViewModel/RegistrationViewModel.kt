@@ -9,9 +9,12 @@ import com.example.shopease.feature_admin.data.remote.ApiRepository
 import com.example.shopease.feature_login.dataStore.saveToken
 import com.example.shopease.feature_login.model.RegisterRequest
 import com.example.shopease.feature_login.model.loginRequest
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RegistrationViewModel(private val repository: ApiRepository) :ViewModel() {
+@HiltViewModel
+class RegistrationViewModel @Inject constructor(private val repository: ApiRepository) :ViewModel() {
 
 
     private val _firstName = MutableLiveData<String>()
