@@ -49,7 +49,7 @@ fun App(
 
     NavHost(
         navController = navController,
-        startDestination = Screen.LoginScreen.route
+        startDestination = Screen.AdminScreen.route
     ) {
 
         composable(

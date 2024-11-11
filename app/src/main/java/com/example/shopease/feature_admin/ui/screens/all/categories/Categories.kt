@@ -169,7 +169,8 @@ fun CategoriesScreen(
                                         .fillParentMaxWidth(0.3f)
                                         .height(70.dp)
                                         .padding(bottom = 10.dp)
-                                        .padding(6.dp)
+                                        .padding(6.dp),
+                                    width = 300.dp,
                                 )
                                 AppTxt(text = item.name ?:"", fontSize = 8.sp, textColor = if(selectedTab.value == index) Color(ShopAppConstants.AppPrimaryColor) else Color.Black)
 

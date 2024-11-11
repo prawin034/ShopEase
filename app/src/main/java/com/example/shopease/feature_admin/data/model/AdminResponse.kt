@@ -119,7 +119,10 @@ data class CardList(
     val cardHolderName :String?,
     val expiryDate :String?,
     val cvv :String?,
-    val cardColor : Color = Color.Black
+    val cardBrand : String?,
+    val cardName : String?,
+    val cardColor : Color = Color.Black,
+
 
 )
 

@@ -9,9 +9,11 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,10 +33,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawStyle
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.shopease.feature_admin.data.model.Product
 import com.example.shopease.feature_admin.data.model.ProductCategory
+import com.example.shopease.feature_common.animations.shimmerEffect
 import com.example.shopease.feature_common.utils.ShopAppConstants
 import com.example.shopease.feature_common.utils.generateRandomColor
 import kotlinx.coroutines.launch
@@ -46,10 +50,7 @@ fun ShopEasePager(product: List<Product>?, navController: NavController)
 {
 
     val scope = rememberCoroutineScope()
-    LazyColumn(modifier = Modifier
-
-        .height(430.dp)
-        .background(color = generateRandomColor()),
+    LazyColumn(modifier = Modifier.height(400.dp).background(generateRandomColor()),
         userScrollEnabled = false
     ) {
         itemsIndexed(product ?: emptyList()) { index: Int, item ->
@@ -57,14 +58,16 @@ fun ShopEasePager(product: List<Product>?, navController: NavController)
             val pagerState = rememberPagerState(initialPage = 0, pageCount = {
                 product?.size ?:0
             })
-            
-            
+
+
             Column {
-                
+
                 HorizontalPager(
                     state = pagerState,
                     pageSpacing = 0.dp,
                     userScrollEnabled = true,
+                    reverseLayout = false,
+                    contentPadding = PaddingValues(0.dp),
                     pageSize = PageSize.Fill,
                     flingBehavior = PagerDefaults.flingBehavior(state = pagerState),
                     key = {
@@ -80,7 +83,7 @@ fun ShopEasePager(product: List<Product>?, navController: NavController)
 
 
 
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomEnd) {
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopEnd) {
                         AsyncImageComponent(
                             imageUrl = image,
                             contentScale = ContentScale.FillBounds,
@@ -94,40 +97,53 @@ fun ShopEasePager(product: List<Product>?, navController: NavController)
                             contentAlignment = Alignment.BottomEnd
                         )
 
+
+
                     }
-                    
+
+
+
                 }
 
 
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp)
-                    .padding(horizontal = 5.dp), horizontalArrangement = Arrangement.Center) {
 
 
-                    product?.forEachIndexed { thumbNailIndex, thumNailProduct ->
-                        Canvas(modifier = Modifier
-
-                            .clickable {
-
-                                scope.launch {
-
-                                    pagerState.animateScrollToPage(thumbNailIndex)
-                                }
 
 
+
+
+
+
+
+            }
+
+
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .offset(y = -20.dp)
+                .padding(bottom = 12.dp)
+                .padding(horizontal = 5.dp), horizontalArrangement = Arrangement.Center)
+            {
+
+
+                product?.forEachIndexed { thumbNailIndex, thumNailProduct ->
+                    Canvas(modifier = Modifier
+
+                        .clickable {
+
+                            scope.launch {
+
+                                pagerState.animateScrollToPage(thumbNailIndex)
                             }
-                            .padding(horizontal = 5.dp)
-                            .clip(CircleShape)
-                            .size(10.dp), onDraw =  {
-                            drawCircle(color = if(thumbNailIndex == pagerState.currentPage) Color.Red else Color.White )
-                        })
-                    }
+
+
+                        }
+                        .padding(horizontal = 5.dp)
+                        .clip(CircleShape)
+                        .size(10.dp), onDraw =  {
+                        drawCircle(color = if(thumbNailIndex == pagerState.currentPage) Color.Red else Color.White )
+                    })
                 }
-                
-                
-                
-                
             }
             
             
@@ -143,4 +159,12 @@ fun ShopEasePager(product: List<Product>?, navController: NavController)
     
     
 
+}
+
+
+@Composable
+fun loading(modifier: Modifier = Modifier.fillMaxWidth(),height : Dp =  400.dp){
+    Box(modifier = Modifier.fillMaxWidth().height(height).shimmerEffect(
+        RoundedCornerShape(0.dp)
+    ))
 }

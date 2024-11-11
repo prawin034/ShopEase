@@ -206,7 +206,9 @@ fun CartItems(product:AddToCartResponse,cartViewModel: CartViewModel,commonViewM
                         imageUrl = item.thumbnail,
                         modifier = Modifier
                             .size(100.dp),
-                        contentScale = ContentScale.FillWidth
+                        contentScale = ContentScale.FillWidth,
+                        width = 100.dp,
+                        height = 100.dp
                     )
 
                     Column(

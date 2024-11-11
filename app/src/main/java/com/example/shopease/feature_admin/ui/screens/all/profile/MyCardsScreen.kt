@@ -2,6 +2,7 @@ package com.example.shopease.feature_admin.ui.screens.all.profile
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
@@ -37,7 +39,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -49,14 +50,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.substring
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -76,7 +80,6 @@ import com.example.shopease.feature_common.components.iconBtn
 import com.example.shopease.feature_common.utils.ShopAppConstants
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import java.time.YearMonth
 import java.util.UUID
 
 
@@ -129,12 +132,7 @@ fun CardsScreen(navController: NavController,cardViewModel: CardViewModel) {
 
             when {
                 cardList.isNotEmpty() -> {
-                    cardList.forEachIndexed { index, cardList ->
-
-                        AppTxt(text = cardList.cardNumber.toString())
-
-
-                    }
+                    LoadCardList(cardList , cardViewModel)
                 }
 
                 else -> {
@@ -197,8 +195,8 @@ fun CardDetailsSheet(
             val myScreen = myPage[it]
             
             when(myScreen){
-                "Details" ->  CardDetails1(pager,cardViewModel)
-                "CardStyle" -> CardDetails2(pager,cardViewModel)
+                "Details" ->  CardDetails1(pager,cardViewModel,  bottomSheetState)
+                "CardStyle" -> CardDetails2(pager,cardViewModel,  bottomSheetState)
             }
             
             
@@ -218,13 +216,18 @@ fun CardDetailsSheet(
 
 
 @Composable
-fun CardDetails1(pager: PagerState, cardViewModel: CardViewModel) {
+fun CardDetails1(
+    pager: PagerState,
+    cardViewModel: CardViewModel,
+    bottomSheetState: MutableState<Boolean>
+) {
     val scope = rememberCoroutineScope()
 
-    var cardList  by remember { mutableStateOf(CardList(UUID.randomUUID().toString(),"","","","")) }
+    var cardList  by remember { mutableStateOf(CardList(UUID.randomUUID().toString(),"","","","","","")) }
     
     val binlookup by cardViewModel.binlookupList.observeAsState(initial = emptyList())
-    
+//    val focusRequester = remember {FocusRequester()}
+    val keyboardController = LocalSoftwareKeyboardController.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -257,7 +260,10 @@ fun CardDetails1(pager: PagerState, cardViewModel: CardViewModel) {
                 Icon(imageVector = Icons.Default.CreditCard, contentDescription = "Card", tint = Color.Black)
                 }
                 else {
-                  AppTxt(text = binlookup[0].cardBrand)
+                 // AppTxt(text = binlookup[0].cardBrand)
+                  Image(painter = painterResource(id = mapCardCategoryToImage(binlookup[0].cardBrand)), contentDescription = "", contentScale = ContentScale.Fit, modifier = Modifier
+                      .width(80.dp)
+                      .height(60.dp))
                 }
             },
             placeHolder = {
@@ -272,14 +278,18 @@ fun CardDetails1(pager: PagerState, cardViewModel: CardViewModel) {
                     // Convert to integer and call getBinList
                    cardViewModel.getBinList(newValue.take(6).toInt())
                 }
-//                else {
-//                    cardViewModel.clearbin()
-//                }
-               
+                else {
+                    cardViewModel.clearbin()
+                }
             },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
+
+        if(binlookup.isNotEmpty()) {
+            cardList = cardList.copy(cardBrand = binlookup[0].cardBrand)
+            cardList = cardList.copy(cardName = binlookup[0].cardType)
+        }
 
         SpacerCommon()
         SpacerCommon()
@@ -375,8 +385,10 @@ fun CardDetails1(pager: PagerState, cardViewModel: CardViewModel) {
         ) {
 
             scope.launch {
+                keyboardController?.hide()
                 coroutineScope {
                     pager.animateScrollToPage(1)
+
                   val id =   cardViewModel.addToCard(cardList)
                     cardViewModel.addCardId(id)
                 }
@@ -398,7 +410,7 @@ fun CardDetails1(pager: PagerState, cardViewModel: CardViewModel) {
 }
 
 @Composable
-fun CardDetails2(pager: PagerState,cardViewModel: CardViewModel) {
+fun CardDetails2(pager: PagerState, cardViewModel: CardViewModel, value: MutableState<Boolean>) {
     val scope = rememberCoroutineScope()
 
     Column(
@@ -453,7 +465,7 @@ fun CardDetails2(pager: PagerState,cardViewModel: CardViewModel) {
 
 
 
-        MyCard(cardViewModel )
+        MyCard(cardViewModel,value )
 
 
 
@@ -470,7 +482,7 @@ fun CardDetails2(pager: PagerState,cardViewModel: CardViewModel) {
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun MyCard(cardViewModel: CardViewModel){
+fun MyCard(cardViewModel: CardViewModel, value: MutableState<Boolean>){
       val colorsList = listOf("Dark-Purple","Black","Blue","Green","Dark-Gray","Pink","orange")
     val selectedColor by remember { mutableStateOf(cardViewModel.selectedColorName) }
 
@@ -582,6 +594,7 @@ fun MyCard(cardViewModel: CardViewModel){
             .height(65.dp)
     ) {
         cardViewModel.updateCardColorById(id = cardId.value, cardColor = mapColor(selectedColor.value))
+        value.value = false
 
         Log.d("CarList","${cardViewModel.cardList}")
     }
@@ -698,6 +711,118 @@ class expiryDateTransformation() : VisualTransformation {
         )
 
 
+    }
+
+}
+
+
+
+fun mapCardCategoryToImage(name:String) : Int {
+
+
+
+    return  when(name.lowercase()) {
+        "visa"  -> com.example.shopease.R.drawable.visa
+        "rupay" ->  com.example.shopease.R.drawable.rupay
+        "mastercard" -> com.example.shopease.R.drawable.master
+         else -> 0
+    }
+}
+
+
+
+@Composable
+fun  LoadCardList(cardList: List<CardList>, cardViewModel: CardViewModel) {
+
+    LazyColumn {
+        itemsIndexed(cardList) { index, item ->
+            AppCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(260.dp)
+                    .padding(16.dp), // Add padding around the card for spacing
+                colors = CardDefaults.cardColors(
+                    containerColor = item.cardColor,
+                    contentColor = Color.White
+                ),
+                enableDefaultPadding = true
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp), // Padding inside the card for content spacing
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+
+                    // Top Section with Bank Name and Card Type
+                    CommonRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        AppTxt(text = "Bank Name", fontSize = 14.sp, textColor = Color.White)
+                        AppTxt(text = "Card Type", fontSize = 14.sp, textColor = Color.White)
+                    }
+
+                    Spacer(modifier = Modifier.height(24.dp)) // Space between top and card number
+
+                    // Centered Card Number
+                    AppTxt(
+                        text = item.cardNumber ?: "",
+                        letterSpacing = 6.sp,
+                        textColor = Color.White,
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(32.dp)) // Space before the bottom section
+
+                    // Bottom Section with Card Holder and Expiry Date
+                    CommonRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        // Card Holder Information
+                        Column(horizontalAlignment = Alignment.Start) {
+                            AppTxt(
+                                text = "Card Holder",
+                                fontSize = 10.sp,
+                                textColor = Color.White,
+                                modifier = Modifier.padding(bottom = 4.dp),
+                                textAlign = TextAlign.Center,
+                            )
+                            AppTxt(
+                                text = item.cardHolderName ?: "",
+                                fontSize = 12.sp,
+                                letterSpacing = 2.sp,
+                                textColor = Color.White,
+                                textAlign = TextAlign.Center,
+                            )
+                        }
+
+                        // Expiry Date Information
+                        Column(horizontalAlignment = Alignment.End) {
+                            AppTxt(
+                                text = "Expiry",
+                                fontSize = 10.sp,
+                                textColor = Color.White,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(bottom = 4.dp)
+                            )
+                            AppTxt(
+                                text = item.expiryDate ?: "",
+                                fontSize = 12.sp,
+                                letterSpacing = 2.sp,
+                                textColor = Color.White,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

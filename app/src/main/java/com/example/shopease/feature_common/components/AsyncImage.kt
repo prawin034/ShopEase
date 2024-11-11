@@ -15,11 +15,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import com.example.shopease.feature_common.animations.shimmerEffect
 
 
 @Composable
@@ -31,6 +33,8 @@ fun AsyncImageComponent(
     badgeAvailable : Boolean = false,
     badgeName :String = "",
     shape: RoundedCornerShape = RoundedCornerShape(12.dp),
+    width: Dp = 30.dp ,
+    height : Dp = 70.dp,
     modifier: Modifier = Modifier
 
 ) {
@@ -55,11 +59,12 @@ fun AsyncImageComponent(
 //        else if (painterState is AsyncImagePainter.State.Error) {
 //            Text(text = "Error..loading", fontSize = 11.sp, fontWeight = FontWeight.SemiBold, color = Color.Red)
 //        }
+        if(painterState is AsyncImagePainter.State.Loading) {
+            Box(modifier = modifier.shimmerEffect(shape))
+        }
 
         if(badgeAvailable) {
            BadgeLabel(text = badgeName)
-
-
 
         }
 

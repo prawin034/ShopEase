@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,6 +47,7 @@ import com.example.shopease.feature_admin.navigation.Screen
 import com.example.shopease.feature_admin.ui.screens.all.details.Avatar
 import com.example.shopease.feature_admin.ui.viewModel.home.HomeScreenViewModel
 import com.example.shopease.feature_common.animations.MarqueTab
+import com.example.shopease.feature_common.animations.shimmerEffect
 import com.example.shopease.feature_common.components.AppScaffold
 import com.example.shopease.feature_common.components.AsyncImageComponent
 import com.example.shopease.feature_common.components.CommonRow
@@ -56,6 +59,7 @@ import com.example.shopease.feature_common.components.ProductCategoryCard
 import com.example.shopease.feature_common.components.SectionTitleTxt
 import com.example.shopease.feature_common.components.SeeAllText
 import com.example.shopease.feature_common.components.ShopEasePager
+import com.example.shopease.feature_common.components.loading
 import com.example.shopease.feature_common.utils.ShopAppConstants
 import com.example.shopease.feature_common.utils.generateRandomColor
 import kotlinx.coroutines.Dispatchers
@@ -150,9 +154,18 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
             if(productBasedOnHotSales?.isNotEmpty() == true) {
                 ShopEasePager(productBasedOnHotSales!![0].products,navController)
             }
+            else {
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(400.dp)
+                    .shimmerEffect(
+                        RoundedCornerShape(0.dp)
+                    ))
+            }
 
 
             // -> 3. First Row contains filter method and all category product cards
+
 
 
 
@@ -165,18 +178,38 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
+                if (getAllProductCategory.isNullOrEmpty()) {
+                    LazyHorizontalGrid(
+                        rows = GridCells.Fixed(2),
+                        modifier = Modifier.height(150.dp),
+                        contentPadding = PaddingValues(horizontal = 0.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ){
+                        items(30) {
+                            Box(
+                                modifier = Modifier
+                                    .width(170.dp)
+                                    .height(60.dp)
+                                    .padding(horizontal = 6.dp)
+                                    .shimmerEffect(RoundedCornerShape(14.dp))
+                            )
+                        }
+                    }
+                    // Show shimmer loading indicator
 
-                LazyHorizontalGrid(rows = GridCells.Fixed(2),
-                    modifier = Modifier.height(150.dp) ,
-                    contentPadding = PaddingValues(horizontal = 0.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp), // Horizontal space between items
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                )
-                {
-                    itemsIndexed(getAllProductCategory ?: emptyList()){ _: Int, item: AllProductCategory ->
-
-                        ProductCategoryCard(productCategory = item)
-
+                } else {
+                    // Show the LazyHorizontalGrid with items
+                    LazyHorizontalGrid(
+                        rows = GridCells.Fixed(2),
+                        modifier = Modifier.height(150.dp),
+                        contentPadding = PaddingValues(horizontal = 0.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        itemsIndexed(getAllProductCategory!!) { _: Int, item: AllProductCategory ->
+                            ProductCategoryCard(productCategory = item)
+                        }
                     }
                 }
 
@@ -213,6 +246,19 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
                 if(productBasedOnHotSales?.isNotEmpty() == true) {
                     CommonCategory(productBasedOnHotSales!![0].products,navController)
                 }
+                else {
+                    LazyRow(modifier = Modifier.height(200.dp).padding(10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(10) {
+                            Box(modifier = Modifier
+                                .width(200.dp)
+                                .height(200.dp)
+                                .shimmerEffect(
+                                    RoundedCornerShape(12.dp)
+                                ))
+                        }
+                    }
+
+                }
             }
 
             Spacer(modifier = Modifier.height(15.dp))
@@ -239,6 +285,19 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
                 if(productBasedOnBeauty?.isNotEmpty() == true) {
                     CommonCategory(productBasedOnBeauty!![0].products, navController)
                 }
+                else {
+                    LazyRow(modifier = Modifier.height(200.dp).padding(10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(10) {
+                            Box(modifier = Modifier
+                                .width(200.dp)
+                                .height(200.dp)
+                                .shimmerEffect(
+                                    RoundedCornerShape(12.dp)
+                                ))
+                        }
+                    }
+
+                }
             }
 
 
@@ -263,6 +322,19 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
                 //4 -> Beauty
                 if(productBasedOnFurniture?.isNotEmpty() == true) {
                     CommonCategory(productBasedOnFurniture!![0].products,navController)
+                }
+                else {
+                    LazyRow(modifier = Modifier.height(200.dp).padding(10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(10) {
+                            Box(modifier = Modifier
+                                .width(200.dp)
+                                .height(200.dp)
+                                .shimmerEffect(
+                                    RoundedCornerShape(12.dp)
+                                ))
+                        }
+                    }
+
                 }
             }
 
@@ -290,6 +362,19 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
                 if(productBasedOnGrocery?.isNotEmpty() == true) {
                     CommonCategory(productBasedOnGrocery!![0].products,navController)
                 }
+                else {
+                    LazyRow(modifier = Modifier.height(200.dp).padding(10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(10) {
+                            Box(modifier = Modifier
+                                .width(200.dp)
+                                .height(200.dp)
+                                .shimmerEffect(
+                                    RoundedCornerShape(12.dp)
+                                ))
+                        }
+                    }
+
+                }
             }
 
 
@@ -313,6 +398,19 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
                 //4 -> Beauty
                 if(productBasedOnWomenDress?.isNotEmpty() == true) {
                     CommonCategory(productBasedOnWomenDress!![0].products,navController)
+                }
+                else {
+                    LazyRow(modifier = Modifier.height(200.dp).padding(10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(10) {
+                            Box(modifier = Modifier
+                                .width(200.dp)
+                                .height(200.dp)
+                                .shimmerEffect(
+                                    RoundedCornerShape(12.dp)
+                                ))
+                        }
+                    }
+
                 }
             }
 
@@ -346,9 +444,17 @@ fun CommonCategory(productBasedOnCategory: List<Product>,navController: NavContr
                 }
                 .padding(horizontal = 10.dp)) {
 //0xFFF7F7FF
-                AsyncImageComponent(imageUrl = item.thumbnail, modifier = Modifier
-                    .width(200.dp)
-                    .height(200.dp), color = generateRandomColor(),badgeAvailable = true, badgeName = item.availabilityStatus)
+                AsyncImageComponent(
+                    imageUrl = item.thumbnail,
+                    modifier = Modifier
+                        .width(200.dp)
+                        .height(200.dp),
+                    color = generateRandomColor(),
+                    badgeAvailable = true,
+                    badgeName = item.availabilityStatus,
+                    width = 200.dp,
+                    height = 200.dp
+                )
                 CommonRow(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                     HeaderText(title = item.title, modifier = Modifier
                         .width(150.dp)

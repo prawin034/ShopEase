@@ -1,6 +1,7 @@
 package com.example.shopease.feature_admin.ui.screens.all.search
 
 import android.annotation.SuppressLint
+import android.icu.text.ListFormatter.Width
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
