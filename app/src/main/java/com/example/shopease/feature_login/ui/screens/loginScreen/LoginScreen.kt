@@ -78,7 +78,9 @@ fun LoginScreen(navController: NavController,loginViewModel: LoginViewModel){
             }
         },
         bottomAppBar = { /*TODO*/ },
-        floatingButton = { /*TODO*/ })
+        floatingButton = { /*TODO*/ },
+        snackbarHost =  {}
+    )
     {
         Column(
             modifier = Modifier

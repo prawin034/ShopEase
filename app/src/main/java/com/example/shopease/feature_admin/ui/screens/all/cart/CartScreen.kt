@@ -71,6 +71,7 @@ fun CartScreen(navController: NavController,cartViewModel: CartViewModel,commonV
 
     val cartResponse by cartViewModel.cartList.observeAsState(emptyList())
     AppScaffold(
+        snackbarHost = {},
         topAppBar = {
 
                  CustomTopAppBar(navigationIcon = {

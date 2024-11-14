@@ -267,7 +267,8 @@ fun SearchScreen(
             },
             bottomAppBar = { /*TODO*/ },
             floatingButton = { /*TODO*/ },
-            modifier = Modifier.padding(it)
+            modifier = Modifier.padding(it),
+            snackbarHost = {}
         )
         {paddingValues ->
             Column(

@@ -42,6 +42,7 @@ fun AppScaffold(
     topAppBar : @Composable () -> Unit,
     bottomAppBar : @Composable () -> Unit,
     floatingButton : @Composable () -> Unit,
+    snackbarHost : @Composable () -> Unit,
     floatingPosition : FabPosition =  FabPosition.Center,
     contentColor : Color = Color.White,
     containerColor: Color =  Color.White,
@@ -65,6 +66,9 @@ fun AppScaffold(
         },
         floatingActionButton = {
                  floatingButton()
+        },
+        snackbarHost =  {
+            snackbarHost()
         },
         floatingActionButtonPosition = floatingPosition,
         contentColor = contentColorUpdate,

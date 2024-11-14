@@ -132,7 +132,9 @@ fun HomeScreen(navController: NavController,homeScreenViewModel: HomeScreenViewM
                     }
         },
         bottomAppBar = { /*TODO*/ },
-        floatingButton = { /*TODO*/ })
+        floatingButton = { /*TODO*/ },
+        snackbarHost =  {}
+    )
     { it ->
         Column(
             modifier = Modifier

@@ -93,6 +93,7 @@ fun CategoriesScreen(
         }
     }
     AppScaffold(
+        snackbarHost =  {},
         topAppBar = {
            CustomTopAppBar(
                navigationIcon = { /*TODO*/ },

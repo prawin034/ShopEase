@@ -116,7 +116,9 @@ fun CardsScreen(navController: NavController,cardViewModel: CardViewModel) {
            }
         },
         bottomAppBar = { /*TODO*/ },
-        floatingButton = { /*TODO*/ })
+        floatingButton = { /*TODO*/ },
+        snackbarHost = {}
+    )
     {
 
         Column(

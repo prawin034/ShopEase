@@ -81,7 +81,9 @@ fun RegistrationScreen(navController: NavController,registrationViewModel: Regis
             }
         },
         bottomAppBar = { /*TODO*/ },
-        floatingButton = { /*TODO*/ })
+        floatingButton = { /*TODO*/ },
+        snackbarHost =  {}
+    )
     { it ->
         Column(
             modifier = Modifier

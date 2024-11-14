@@ -72,7 +72,8 @@ fun AdminScreen(
 
                  }
         },
-        floatingButton = { /*TODO*/ }
+        floatingButton = { /*TODO*/ },
+        snackbarHost = {}
     )
     {
         Column(
