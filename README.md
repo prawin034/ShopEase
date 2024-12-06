@@ -26,6 +26,8 @@ Tech Stack
 
      Architecture: MVVM (Model-View-ViewModel)
 
+     DEPENDENCY INJECTION - HILT 
+
      Networking: Retrofit and OkHttp, with interceptors for handling authentication tokens and headers
 
      Local Storage: SharedPreferences for saving user settings
