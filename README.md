@@ -6,7 +6,7 @@ ShopEase -> E-commerce App
 
 Project ScreenShots 
 
- ![image text](https://github.com/prawin034/ShopEase/blob/2a48bda5b74dd1e43c06ef37a836b93727e74c5f/ScreenShot1.png)  ![image text](https://github.com/prawin034/ShopEase/blob/2a48bda5b74dd1e43c06ef37a836b93727e74c5f/ScreenShot1.png)
+ ![image text](https://github.com/prawin034/ShopEase/blob/2a48bda5b74dd1e43c06ef37a836b93727e74c5f/ScreenShot1.png)
 
 
 
