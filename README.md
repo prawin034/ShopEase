@@ -7,8 +7,7 @@ ShopEase -> E-commerce App
 Project ScreenShots 
 
 
-                      ![man_4140048](https://github.com/user-attachments/assets/3b879ea9-bf06-4ce4-928a-7708475f7d42)
-  
+           ![Alt text]( https://drive.google.com/drive/u/0/folders/12xG9Mq6d9h_NElMGVJoTPNVG5Gu4IC0J)
 
 
 
