@@ -7,7 +7,6 @@ ShopEase -> E-commerce App
 Project ScreenShots 
 
 
-           ![Alt text]( https://drive.google.com/drive/u/0/folders/12xG9Mq6d9h_NElMGVJoTPNVG5Gu4IC0J)
 
 
 
